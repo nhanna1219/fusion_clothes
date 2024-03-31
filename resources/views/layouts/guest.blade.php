@@ -8,9 +8,7 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+        <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'>
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -18,10 +16,14 @@
         @livewireStyles
     </head>
     <body>
-        <div class="font-sans text-gray-900 antialiased">
-            {{ $slot }}
+        <div class="flex flex-col min-h-screen">
+            <x-header />
+            <x-header-nav />
+            <div class="flex-1 p-10 text-gray-900 antialiased">
+                {{ $slot }}
+            </div>
+            <x-footer />
         </div>
-
         @livewireScripts
     </body>
 </html>

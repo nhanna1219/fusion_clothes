@@ -1,7 +1,21 @@
+@import './home.css';
+@import './product.css';
+@import './product_details.css';
+@import './checkout.css';
+@import './checkout__thankyou.css';
+@import './checkout_confirmation.css';
+@import './cart.css';
+@import './about.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 [x-cloak] {
     display: none;
+}
+
+* {
+    font-family: 'Roboto Slab';
+    box-sizing: border-box;
 }
