@@ -18,7 +18,6 @@
     <body>
         <div class="flex flex-col min-h-screen">
             <x-header />
-            <x-header-nav />
             <div class="flex-1 p-10 text-gray-900 antialiased">
                 {{ $slot }}
             </div>

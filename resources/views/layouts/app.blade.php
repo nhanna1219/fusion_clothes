@@ -9,8 +9,12 @@
 
         <!-- Fonts -->
         <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'>
+        {{-- Favicon --}}
+        <link rel="icon" type="image/x-icon" href="{{asset ('storage/black-logo.png')}}" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/x-icon" href="{{asset ('storage/light-logo.png')}}" media="(prefers-color-scheme: dark)">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
         <!-- FontAwesome -->
         {{-- <script src="https://kit.fontawesome.com/3518e7db2c.js" crossorigin="anonymous"></script> --}}
         <!-- Styles -->
@@ -26,9 +30,6 @@
             <!-- Page Heading -->
             @if (isset($header))
                 <x-header />
-            @endif
-            @if (isset($header_nav))
-                <x-header-nav />
             @endif
 
             <!-- Page Content -->

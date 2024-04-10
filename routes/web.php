@@ -17,7 +17,6 @@ Route::get('/products', [ProductController::class, 'index'])->name('customer.pro
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('customer.products.show');
 Route::get('/cart', [CartController::class, 'index'])->name('customer.cart.index');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('customer.checkout.index');
-Route::post('/checkout', [CheckoutController::class, 'store'])->name('customer.checkout.store');
 Route::get('/checkout/confirmation', [CheckoutController::class, 'confirmation'])->name('customer.checkout.confirmation');
 Route::get('/checkout/thank-you', [CheckoutController::class, 'friendlyThanks'])->name('customer.checkout.friendlyThanks');
 // Route::get('/profile', [UserProfileController::class, 'index'])->name('customer.profile.index');

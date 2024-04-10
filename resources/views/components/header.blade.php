@@ -1,14 +1,21 @@
-<header class="bg-white px-12 py-4 shadow-md min-w-full">
+<header class="bg-white px-12 py-5 shadow-md min-w-full">
     <div class="mx-auto flex justify-between items-center">
         <!-- Logo and brand name -->
         <div class="brand flex items-center space-x-4">
             <a href="/" class="flex items-center space-x-4">
                 <!-- Ensure the path to the logo is correctly referenced -->
-                <img src="{{ asset('storage/logo.png') }}" alt="Logo" class="h-10">
+                <img src="{{ asset('storage/black-logo.png') }}" alt="Logo" class="h-10">
                 <span class="font-bold text-xl tracking-wide">FUSION CLOTH</span>
             </a>
         </div>
-            <!-- Icons -->
+        <!-- Navigation -->
+        <nav class="flex justify-between items-center align-middle mb-2 w-[38%]">
+            <a href="/home" class="text-[#413e3e] hover:text-red-600 font-semibold relative before:content-[''] before:absolute before:w-0 before:h-0.5 before:bg-red-600 before:transition-all before:duration-300 before:-bottom-1 before:left-1/2 before:transform before:translate-x-[-50%] hover:before:w-full">Home</a>
+            <a href="/products" class="text-[#413e3e] hover:text-red-600 font-semibold relative before:content-[''] before:absolute before:w-0 before:h-0.5 before:bg-red-600 before:transition-all before:duration-300 before:-bottom-1 before:left-1/2 before:transform before:translate-x-[-50%] hover:before:w-full">Shop</a>
+            <a href="/about" class="text-[#413e3e] hover:text-red-600 font-semibold relative before:content-[''] before:absolute before:w-0 before:h-0.5 before:bg-red-600 before:transition-all before:duration-300 before:-bottom-1 before:left-1/2 before:transform before:translate-x-[-50%] hover:before:w-full">About Us</a>
+            <a href="/contact" class="text-[#413e3e] hover:text-red-600 font-semibold relative before:content-[''] before:absolute before:w-0 before:h-0.5 before:bg-red-600 before:transition-all before:duration-300 before:-bottom-1 before:left-1/2 before:transform before:translate-x-[-50%] hover:before:w-full">Contact Us</a>
+        </nav>
+        <!-- Icons -->
         <div class="flex items-center space-x-4 justify-between w-64">
             <a href="/search" class="hover:text-gray-600">
                 <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g data-name="Layer 2"><g data-name="search"><rect width="24" height="24" opacity="0"/><path d="M20.71 19.29l-3.4-3.39A7.92 7.92 0 0 0 19 11a8 8 0 1 0-8 8 7.92 7.92 0 0 0 4.9-1.69l3.39 3.4a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 11a6 6 0 1 1 6 6 6 6 0 0 1-6-6z"/></g></g></svg>

@@ -8,5 +8,25 @@
 .nav-icon:hover {
     width: 30px;
     height: 30px;
-    fill: gold;
+    fill: rgb(220 38 38 / var(--tw-text-opacity));
+}
+
+.gradient-background {
+    background: linear-gradient(to bottom, #ffffff 0%, #e6e6e6 50%, #ffffff 100%);
+    width: 100%;
+}
+
+@keyframes slideAndFadeIn {
+    from {
+        opacity: 0.5;
+        transform: translateY(20%); /* Starts from 20% below its final position */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-fade-in {
+    animation: slideAndFadeIn 1.2s ease-in-out forwards;
 }
