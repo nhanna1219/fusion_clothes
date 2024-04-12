@@ -28,5 +28,17 @@
 }
 
 .slide-fade-in {
-    animation: slideAndFadeIn 1.2s ease-in-out forwards;
+    animation: slideAndFadeIn 1s ease-in-out forwards;
+}
+
+
+.featured-text {
+    background: linear-gradient(to bottom, #000000 0%, #b8b6b6 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.new-arrival{
+    background-color: #eeeeee4f;
 }

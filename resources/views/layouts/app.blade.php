@@ -32,9 +32,11 @@
                 <x-header />
             @endif
 
+
             <!-- Page Content -->
             <div class="flex-1">
                 {{ $slot }}
+                <x-scroll-top-btn />
             </div>
             <x-footer />
         </div>
