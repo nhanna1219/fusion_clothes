@@ -66,12 +66,31 @@
                     </div>
                 </div>
             </div>
-            <div class="flex ml-20 gap-x-7 gap-y-8 flex-wrap">
-                <x-product-item type="product"/>
-                <x-product-item type="product"/>
-                <x-product-item type="product"/>
-                <x-product-item type="product"/>
-                <x-product-item type="product"/>
+            <div class="flex flex-col ml-20 gap-y-10">
+                <div class="flex flex-col gap-y-5">
+                    <div class="flex justify-between items-center">
+                        <div>Showing 1-12 of 240 results</div>
+                        <div>
+                            Sort by: 
+                            <select name="" id="">
+                                <option value="Default Sorting">Default Sorting</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex gap-x-5 items-center">
+                        <div>Active Filter</div>
+                        <x-filter-item filter-option="Men"/>
+                        <x-filter-item filter-option="T-Shirts"/>
+                        <div class="underline cursor-pointer">Clear All</div>
+                    </div>
+                </div>
+                <div class="flex gap-x-7 gap-y-8 flex-wrap">
+                    <x-product-item type="product"/>
+                    <x-product-item type="product"/>
+                    <x-product-item type="product"/>
+                    <x-product-item type="product"/>
+                    <x-product-item type="product"/>
+                </div>
             </div>
         </div>
     </div>
