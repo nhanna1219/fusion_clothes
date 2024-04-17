@@ -48,8 +48,22 @@
                     </div>
                 </div>
                 <div class="h-[1.5px] bg-[#C9C9C9] opacity-60"></div>
-                <div class="flex flex-col gap-y-3">
-                    <div>Price</div>
+                <div>
+                    <div class="flex flex-col gap-y-3 mb-3">
+                        <div>Price</div>
+                        <div id="price" class="flex font-normal text-[#4A4A4A] text-base">
+                            <span id="min-value">$25.00</span>
+                            <div class="ml-1 mr-1">-</div>
+                            <span id="max-value">$125.00</span>
+                        </div>
+                    </div>
+                    <div id="slider" class="relative h-[5px] bg-[#C9C9C9] rounded-[5px]">
+                        <div id="progress" class="h-full left-1/4 right-1/4 absolute rounded-[5px] bg-[#0A0A0A]"></div>
+                    </div>
+                    <div id="range-input" class="relative">
+                        <input type="range" id="range-min" min="0" max="1000" value="100" step="10">
+                        <input type="range" id="range-max" min="0" max="1000" value="500" step="10">
+                    </div>
                 </div>
             </div>
             <div class="flex ml-20 gap-x-7 gap-y-8 flex-wrap">

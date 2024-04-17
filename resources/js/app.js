@@ -1,2 +1,3 @@
-import './bootstrap';
-import './home';
+import "./bootstrap";
+import "./home";
+import "./product";
