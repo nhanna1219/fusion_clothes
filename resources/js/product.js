@@ -29,3 +29,52 @@ function updateSliderPrice(slider) {
         range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
     }
 }
+
+// add filter button
+
+const checkboxes = document.querySelectorAll("input[type=checkbox]");
+const filterContainer = document.querySelector("#filter-container");
+const clearFilter = document.querySelector("#clear-filter");
+
+checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+        let temp = document.querySelector("#filter-template");
+        let filterOption = temp.content.cloneNode(true);
+        if (checkbox.checked) {
+            let value = checkbox.nextElementSibling.textContent.trim();
+            filterOption.querySelector("#filter-name").textContent = value;
+            filterContainer.insertBefore(filterOption, clearFilter);
+        } else {
+            let value = checkbox.nextElementSibling.textContent.trim();
+            let filterItems = filterContainer.querySelectorAll("#filter");
+            filterItems.forEach((item) => {
+                if (item.querySelector("#filter-name").textContent === value) {
+                    item.remove();
+                }
+            });
+        }
+    });
+});
+
+clearFilter.addEventListener("click", () => {
+    let filterItems = filterContainer.querySelectorAll("#filter");
+    filterItems.forEach((item) => {
+        item.remove();
+    });
+    checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+    });
+});
+
+window.removeFilter = function (filter) {
+    filter.parentNode.remove();
+    let value = filter.parentNode.querySelector("#filter-name").textContent;
+    checkboxes.forEach((checkbox) => {
+        if (
+            checkbox.checked &&
+            checkbox.nextElementSibling.textContent.trim() === value
+        ) {
+            checkbox.checked = false;
+        }
+    });
+};
