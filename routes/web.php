@@ -19,7 +19,7 @@ Route::get('/cart', [CartController::class, 'index'])->name('customer.cart.index
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('customer.checkout.index');
 Route::get('/checkout/confirmation', [CheckoutController::class, 'confirmation'])->name('customer.checkout.confirmation');
 Route::get('/checkout/thank-you', [CheckoutController::class, 'friendlyThanks'])->name('customer.checkout.friendlyThanks');
-// Route::get('/profile', [UserProfileController::class, 'index'])->name('customer.profile.index');
+Route::get('/profile', [UserProfileController::class, 'index'])->name('customer.profile.index');
 Route::get('/orders/history', [OrderController::class, 'history'])->name('customer.orders.history');
 Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders.index');
 Route::get('/orders/{id}', [OrderController::class, 'show'])->name('customer.orders.details');
