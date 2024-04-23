@@ -1,0 +1,121 @@
+.completed{
+    margin-bottom: 30px;
+}
+.tick{
+    text-align: center;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+.tick .icons{
+    width: 50px;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tick .sentence1{
+    font-weight: bold;
+}
+.tick .sentence2{
+    color: grey;
+    font-weight: 500;
+}
+
+.in4order{
+    display:flex;
+    justify-content: center;
+    background-color: black;
+    color: white;
+    width: 70%;
+    margin: 50px auto;
+    padding: 20px;
+ 
+}
+.in4order .items {
+    display: inline-block;
+    width: 200px;
+    text-align: center;
+    border-right: solid 1px grey;
+}
+.in4order .items :first-child{
+    color: grey;
+    font-size: 15px;
+}
+.in4order .download
+{
+    width: 200px;
+    background-color:  white;
+    color: black;
+    text-align: center;
+    padding-top: 10px;
+    margin-left: 50px;
+}
+
+.tableproduct{
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+.tableproduct .detail{
+    font-weight: bold;
+    border-bottom: 1px solid grey;
+    padding: 10px 0;
+}
+.tableproduct .producttitle
+{
+    display: flex;
+    justify-content: space-between;
+    font-weight:  bold;
+    padding: 10px 0;
+    border-bottom: 1px solid grey;
+    margin-bottom: 20px;
+}
+.inforproduct img{
+    width: 100px;
+    margin-right: 20px;
+}
+.product{
+    display: flex;
+    justify-content:  space-between;
+    margin-bottom: 20px;
+    border-bottom: 1px solid gray;
+    padding: 20px 0;
+}
+.inforproduct{
+    display: flex;
+}
+.colorsize p{
+    display: inline;
+    margin-right: 20px; 
+}
+.contentpro>p{
+    font-weight: bold;
+}
+.fee{
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 100px;
+}
+.shipping{
+    display: flex;
+    justify-content: space-between;
+}
+.taxes{
+    display: flex;
+    justify-content: space-between;
+}
+.coupon{
+    display: flex;
+    justify-content: space-between;
+}
+.total
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+

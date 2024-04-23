@@ -77,11 +77,12 @@
                             </select>
                         </div>
                     </div>
-                    <div class="flex gap-x-5 items-center">
+                    <div class="flex gap-5 items-center flex-wrap" id="filter-container">
                         <div>Active Filter</div>
-                        <x-filter-item filter-option="Men"/>
-                        <x-filter-item filter-option="T-Shirts"/>
-                        <div class="underline cursor-pointer">Clear All</div>
+                        <template id="filter-template">
+                            <x-filter-item/>
+                        </template>
+                        <div class="underline cursor-pointer" id="clear-filter">Clear All</div>
                     </div>
                 </div>
                 <div class="flex gap-x-7 gap-y-8 flex-wrap">
