@@ -1,24 +1,25 @@
 <?php
 
 namespace App\Http\Controllers\Customer;
-use App\Http\Controllers\Controller;
+
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request): View
     {
-        return view('customer.products.index');
+        $products = Product::with(['category', 'images'])->paginate(8);
+
+        return view('customer.products.index', compact('products'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Request $request, $id): View
     {
-        return view('customer.products.details');
+        $product = Product::with(['category', 'images', 'variants.size', 'variants.color'])->findOrFail($id);
+
+        return view('customer.products.show', compact('product'));
     }
 }

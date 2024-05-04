@@ -18,4 +18,11 @@
 * {
     font-family: 'Roboto Slab';
     box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+:root {
+    --swiper-navigation-size: 35px!important;
+    --swiper-navigation-color: black;
+    --swiper-pagination-color: gray;
 }

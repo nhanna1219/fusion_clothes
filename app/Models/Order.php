@@ -4,22 +4,39 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
     use HasFactory;
-    protected $table = 'orders';
-    protected $guarded = ['id'];
 
-    public function user() {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user_id',
+        'status',
+        'total',
+        'modified_at',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'user_id' => 'integer',
+        'total' => 'decimal:2',
+        'created_at' => 'timestamp',
+        'modified_at' => 'timestamp',
+    ];
+
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
-    }
-
-    public function orderDetails() {
-        return $this->hasMany(OrderDetail::class);
-    }
-
-    public function paymentDetails() {
-        return $this->hasMany(PaymentDetail::class);
     }
 }

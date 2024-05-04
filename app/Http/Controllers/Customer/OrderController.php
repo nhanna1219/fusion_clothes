@@ -1,21 +1,30 @@
 <?php
 
 namespace App\Http\Controllers\Customer;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
+use App\Http\Requests\OrderUpdateRequest;
+use App\Models\Order;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use App\Http\Controllers\Controller;
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request): View
     {
-        // Fetch orders for the logged-in user or for an admin view
-        return view('customer.orders.index');
+        $orders = Order::paginate(10);
+        return view('customer.orders.index', compact('orders'));
     }
-    public function show(string $id)
+
+    public function show(Request $request, Order $order): View
     {
-        return view('customer.orders.details');
+        return view('customer.orders.details', compact('order'));
     }
-    public function history(){
-        return view('customer.orders.history');
+
+    public function update(OrderUpdateRequest $request, Order $order): RedirectResponse
+    {
+        $order->update($request->validated());
+        return redirect()->route('customer.orders.details', $order->id);
     }
 }
+

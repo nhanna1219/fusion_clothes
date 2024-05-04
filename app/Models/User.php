@@ -64,7 +64,7 @@ class User extends Authenticatable
     }
 
     public function roles() {
-        return $this->belongsToMany(UserRole::class); // Adjust if you have a different table structure
+        return $this->belongsToMany(UserRole::class);
     }
     public function addresses() {
         return $this->hasMany(UserAddress::class);
@@ -74,7 +74,4 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function shoppingSessions() {
-        return $this->hasMany(ShoppingCartSession::class);
-    }
 }
