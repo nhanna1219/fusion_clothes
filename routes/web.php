@@ -18,6 +18,9 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->name('customer
 Route::get('/cart', [CartController::class, 'index'])->name('customer.cart.index');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('customer.checkout.index');
 Route::get('/checkout/confirmation', [CheckoutController::class, 'confirmation'])->name('customer.checkout.confirmation');
+
+Route::post('/momo_payment', [CheckoutController::class, 'momopayment']);
+
 Route::get('/checkout/thank-you', [CheckoutController::class, 'friendlyThanks'])->name('customer.checkout.friendlyThanks');
 Route::get('/profile', [UserProfileController::class, 'index'])->name('customer.profile.index');
 Route::get('/orders/history', [OrderController::class, 'history'])->name('customer.orders.history');
@@ -26,6 +29,7 @@ Route::get('/orders/{id}', [OrderController::class, 'show'])->name('customer.ord
 
 // Authenticated Routes
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+
     /* Uncomment When Finish Developing Frontend
 
     // Checkout Process
