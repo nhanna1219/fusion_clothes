@@ -110,7 +110,7 @@
                             </tr>
                         </table>
                     </div>
-                    <form action="http://127.0.0.1:8000/checkout/confirmation">
+                    <form action=" {{ url('/checkout/confirmation') }}">
                         <div class="flex justify-center">
                             <button type="submit" class="w-[80%] text-white bg-black h-16 text-[17px]">Continue to Payment</button>
                         </div>

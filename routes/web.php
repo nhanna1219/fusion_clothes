@@ -24,6 +24,7 @@ Route::get('/orders/history', [OrderController::class, 'history'])->name('custom
 Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders.index');
 Route::get('/orders/{id}', [OrderController::class, 'show'])->name('customer.orders.details');
 
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 // Authenticated Routes
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     /* Uncomment When Finish Developing Frontend
