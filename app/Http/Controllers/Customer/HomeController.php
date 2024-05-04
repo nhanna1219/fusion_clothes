@@ -12,8 +12,8 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::with(['category', 'images'])->get();
-        // Debugbar::info($products);
+        $products = Product::with(['category', 'images'])->inRandomOrder()->get();
+        Debugbar::info($products);
         return view('customer.home.index', compact('products'));
     }
 }

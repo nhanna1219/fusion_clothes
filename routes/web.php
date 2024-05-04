@@ -31,6 +31,7 @@ Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders.
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('customer.orders.details');
 Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('customer.orders.update');
 
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 // Authenticated Routes
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
 

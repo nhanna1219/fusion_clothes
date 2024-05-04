@@ -1,3 +1,6 @@
+@php
+    $splitIndex = ceil($products->count() / 2);
+@endphp
 <x-app-layout>
     <x-slot name="header"></x-slot>
     <div class="flex w-full h-[89vh] relative">
@@ -52,16 +55,23 @@
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper px-10 py-12">
                     <!-- Slides -->
-                    <div class="swiper-slide"><x-product-item type="new-arrival" /></div>
-                    <div class="swiper-slide"><x-product-item type="new-arrival" /></div>
-                    <div class="swiper-slide"><x-product-item type="new-arrival" /></div>
-                    <div class="swiper-slide"><x-product-item type="new-arrival" /></div>
-                    <div class="swiper-slide"><x-product-item type="new-arrival" /></div>
-                    <div class="swiper-slide"><x-product-item type="new-arrival" /></div>
-                    <div class="swiper-slide"><x-product-item type="new-arrival" /></div>
+                    @foreach ($products as $index => $product)
+                        @if ($index < $splitIndex)
+                            <div class="swiper-slide">
+                                <x-product-item
+                                    usage="new-arrival"
+                                    id="product-item-{{ $product->id }}"
+                                    image="{{ $product->images->first()->image_path }}"
+                                    type="{{ $product->category->name }}"
+                                    rating="4"
+                                    price="{{ $product->price }}"
+                                    name="{{ $product->name }}"
+                                />
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
                 <div class="swiper-pagination"></div>
-
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
             </div>
@@ -72,23 +82,30 @@
         <div class="mx-auto px-32 py-10">
             <!-- New Arrival Section -->
             <div class="flex text-center justify-center items-center pb-6">
-                <h1 class="font-bold border-2 rounded-lg border-black px-24 py-2 shadow-xl">Our Best Sellern</h1>
+                <h1 class="font-bold border-2 rounded-lg border-black px-24 py-2 shadow-xl">Our Best Seller</h1>
             </div>
-            @if(isset($product))
-
+            @if (isset($product))
             @endif
             <!-- Slider main container -->
             <div class="swiper">
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper px-10 py-12">
                     <!-- Slides -->
-                    <div class="swiper-slide"><x-product-item type="best-seller" /></div>
-                    <div class="swiper-slide"><x-product-item type="best-seller" /></div>
-                    <div class="swiper-slide"><x-product-item type="best-seller" /></div>
-                    <div class="swiper-slide"><x-product-item type="best-seller" /></div>
-                    <div class="swiper-slide"><x-product-item type="best-seller" /></div>
-                    <div class="swiper-slide"><x-product-item type="best-seller" /></div>
-                    <div class="swiper-slide"><x-product-item type="best-seller" /></div>
+                    @foreach ($products as $index => $product)
+                        @if ($index >= $splitIndex)
+                            <div class="swiper-slide">
+                                <x-product-item
+                                    usage="best-seller"
+                                    id="product-item-{{ $product->id }}"
+                                    image="{{ $product->images->first()->image_path }}"
+                                    type="{{ $product->category->name }}"
+                                    rating="4"
+                                    price="{{ $product->price }}"
+                                    name="{{ $product->name }}"
+                                />
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
                 <div class="swiper-pagination"></div>
 
@@ -123,7 +140,8 @@
                 </video>
                 <!-- Testimonial Column -->
                 <div class="bg-white p-6 shadow-lg rounded-t-none rounded-b-md w-[281px] border-black">
-                    <p class="text-gray-600 italic">"Absolutely in love with Fusion! Every item is a fashion statement that turns heads."</p>
+                    <p class="text-gray-600 italic">"Absolutely in love with Fusion! Every item is a fashion statement
+                        that turns heads."</p>
                     <div class="mt-4 ms-auto w-fit">
                         <h2 class="text-sm font-semibold">Emma Watson</h2>
                     </div>
@@ -132,7 +150,8 @@
             <div class="w-1/4 opacity-0 transition-opacity duration-500 ease-in-out item delay-300">
                 <!-- Testimonial Column -->
                 <div class="bg-white p-6 shadow-lg rounded-t-md rounded-b-none w-[281px] border-black">
-                    <p class="text-gray-600 italic">"Fusion is my go-to for style and comfort. Their pieces always feel tailor-made for me!"</p>
+                    <p class="text-gray-600 italic">"Fusion is my go-to for style and comfort. Their pieces always feel
+                        tailor-made for me!"</p>
                     <div class="mt-4 ms-auto w-fit">
                         <h2 class="text-sm font-semibold">Michael Johnson</h2>
                     </div>
@@ -150,7 +169,8 @@
                 </video>
                 <!-- Testimonial Column -->
                 <div class="bg-white p-6 shadow-lg rounded-t-none rounded-b-md w-[281px] border-black">
-                    <p class="text-gray-600 italic">"Fusion's clothing line blends quality with the latest trends—always spot on!"</p>
+                    <p class="text-gray-600 italic">"Fusion's clothing line blends quality with the latest
+                        trends—always spot on!"</p>
                     <div class="mt-4 ms-auto w-fit">
                         <h2 class="text-sm font-semibold">David Smith</h2>
                     </div>

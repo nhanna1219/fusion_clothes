@@ -3,10 +3,21 @@ const priceInput = document.querySelectorAll("#price span");
 const range = document.querySelector("#slider #progress");
 let priceGap = 200;
 
-updateSliderPrice();
+sortProductItems(document.querySelector("#sorting").selectedOptions[0].value);
+let sliderTimeout;
+
 rangeInput.forEach((input) => {
     input.addEventListener("input", (e) => {
         updateSliderPrice(e);
+    });
+});
+
+rangeInput.forEach((input) => {
+    input.addEventListener("mouseup", (e) => {
+        clearTimeout(sliderTimeout);
+        sliderTimeout = setTimeout(() => {
+            filterProductItems();
+        }, 500);
     });
 });
 
@@ -15,27 +26,119 @@ function updateSliderPrice(slider) {
         maxVal = parseInt(rangeInput[1].value);
 
     if (maxVal - minVal < priceGap) {
-        if (slider.target.id === "range-min") {
+        if (slider && slider.target.id === "range-min") {
             rangeInput[0].value = maxVal - priceGap;
-        } else {
+        } else if (slider && slider.target.id === "range-max") {
             rangeInput[1].value = minVal + priceGap;
         }
     } else {
-        priceInput[0].value = minVal;
-        priceInput[1].value = maxVal;
-        priceInput[0].textContent = "$" + priceInput[0].value;
-        priceInput[1].textContent = "$" + priceInput[1].value;
+        priceInput[0].textContent = "$" + minVal;
+        priceInput[1].textContent = "$" + maxVal;
+
         range.style.left = (minVal / rangeInput[0].max) * 100 + "%";
         range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
     }
 }
 
-// add filter button
+function filterProductItems() {
+    let minVal = parseInt(rangeInput[0].value),
+        maxVal = parseInt(rangeInput[1].value);
+
+    const productItems = document.querySelectorAll("#product-item");
+    productItems.forEach((productItem) => {
+        const priceElement = productItem.querySelector("#product-price");
+        const price = parseFloat(priceElement.textContent.replace("$", ""));
+        if (price >= minVal && price <= maxVal) {
+            productItem.classList.remove("hidden");
+        } else {
+            productItem.classList.add("hidden");
+        }
+    });
+}
+
+const sortSelect = document.querySelector("#sorting");
+sortSelect.addEventListener("change", () => {
+    const sortCriteria = sortSelect.value;
+    sortProductItems(sortCriteria);
+});
+
+function sortProductItems(criteria) {
+    const productItems = document.querySelectorAll("#product-item");
+    const productsWithPrices = Array.from(productItems).map((productItem) => {
+        const priceElement = productItem.querySelector("#product-price");
+        const price = parseFloat(priceElement.textContent.replace("$", ""));
+        return { element: productItem, price: price };
+    });
+
+    if (criteria == "Price") {
+        productsWithPrices.sort((a, b) => a.price - b.price);
+    } else {
+        productsWithPrices.sort((a, b) => {
+            const nameA = a.element
+                .querySelector("#product-name")
+                .textContent.toLowerCase();
+            const nameB = b.element
+                .querySelector("#product-name")
+                .textContent.toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+    }
+
+    const productContainer = document.getElementById("product-container");
+    productContainer.innerHTML = "";
+    productsWithPrices.forEach((product) => {
+        productContainer.appendChild(product.element);
+    });
+}
 
 const checkboxes = document.querySelectorAll("input[type=checkbox]");
 const filterContainer = document.querySelector("#filter-container");
 const clearFilter = document.querySelector("#clear-filter");
 
+let originalProductList = [];
+
+function initializeProductList() {
+    originalProductList = Array.from(
+        document.querySelectorAll("#product-item")
+    );
+}
+
+initializeProductList();
+
+const observer = new MutationObserver((mutationsList, observer) => {
+    console.log("changed");
+    filterByCategory();
+});
+
+observer.observe(filterContainer, { childList: true });
+function filterByCategory() {
+    let selectedCategories = [];
+    const filters = document.querySelectorAll("#filter");
+    filters.forEach((filter) => {
+        let category = filter.querySelector("#filter-name").textContent.trim();
+        selectedCategories.push(category);
+    });
+
+    console.log(selectedCategories);
+
+    const productContainer = document.getElementById("product-container");
+    productContainer.innerHTML = "";
+
+    if (selectedCategories.length === 0) {
+        originalProductList.forEach((product) => {
+            productContainer.appendChild(product);
+        });
+    } else {
+        originalProductList.forEach((product) => {
+            let type = product
+                .querySelector("#product-type")
+                .textContent.trim();
+            if (selectedCategories.includes(type)) {
+                productContainer.appendChild(product);
+            }
+        });
+    }
+}
 checkboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", () => {
         let temp = document.querySelector("#filter-template");
@@ -53,6 +156,7 @@ checkboxes.forEach((checkbox) => {
                 }
             });
         }
+        filterByCategory();
     });
 });
 
