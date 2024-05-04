@@ -11,6 +11,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .number-input {
     border: 2px solid #ddd;
+    border-radius: 5px;
     display: inline-flex;
     width: 100%;
 }

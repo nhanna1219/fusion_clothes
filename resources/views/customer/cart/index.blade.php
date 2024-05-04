@@ -39,7 +39,7 @@
                             </td>
                             <td class="px-4 py-2 ">$75.00</td>
                             <td class="px-4 py-2">
-                                <div class="number-input">
+                                <div class="number-input max-w-[90px]">
                                     <button
                                         onclick="this.parentNode.querySelector('input[type=number]').stepDown()"></button>
                                     <input class="quantity" min="1" name="quantity" value="1"
@@ -73,7 +73,7 @@
                             </td>
                             <td class="px-4 py-2">$75.00</td>
                             <td class="px-4 py-2">
-                                <div class="number-input">
+                                <div class="number-input max-w-[90px]">
                                     <button
                                         onclick="this.parentNode.querySelector('input[type=number]').stepDown()"></button>
                                     <input class="quantity" min="1" name="quantity" value="1"
@@ -105,7 +105,7 @@
                             </td>
                             <td class="px-4 py-2 ">$75.00</td>
                             <td class="px-4 py-2">
-                                <div class="number-input">
+                                <div class="number-input max-w-[90px]">
                                     <button
                                         onclick="this.parentNode.querySelector('input[type=number]').stepDown()"></button>
                                     <input class="quantity" min="1" name="quantity" value="1"
@@ -136,7 +136,7 @@
                             </td>
                             <td class="px-4 py-2 ">$75.00</td>
                             <td class="px-4 py-2">
-                                <div class="number-input">
+                                <div class="number-input max-w-[90px]">
                                     <button
                                         onclick="this.parentNode.querySelector('input[type=number]').stepDown()"></button>
                                     <input class="quantity" min="1" name="quantity" value="1"
