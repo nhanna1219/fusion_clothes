@@ -1,5 +1,6 @@
 import "./bootstrap";
 import "./home";
-import "./checkout";
 import "./product_detail";
+import "./checkout";
+
 import "./product";

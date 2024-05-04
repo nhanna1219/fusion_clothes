@@ -1,0 +1,32 @@
+.left {
+    width: 50%;
+    margin-left: 20px;
+}
+
+.big-img {
+    width: 90%;
+}
+.big-img img {
+    width: inherit;
+}
+
+.images {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 5px;
+    width: 80%;
+    margin-top: 15px;
+}
+.small-img {
+    width: 100%;
+    overflow: hidden;
+    border: 1.5px solid black;
+}
+.small-img img {
+    width: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.small-img:hover img {
+    transform: scale(1.2);
+}
