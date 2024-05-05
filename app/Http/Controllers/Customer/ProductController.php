@@ -165,7 +165,7 @@ class ProductController extends Controller
         $currentPageItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->all();
         $paginationItems= new LengthAwarePaginator($currentPageItems, count($collection), $perPage);
 
-        $paginationItems->withPath(route('products.index'));
+        $paginationItems->withPath(route('customer.products.index'));
 
         return view('customer.products.index', compact('paginationItems'));
     }

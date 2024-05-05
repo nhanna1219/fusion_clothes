@@ -6,6 +6,7 @@ use App\Http\Controllers\Customer\AboutUsController;
 use App\Http\Controllers\Customer\ProductController;
 use App\Http\Controllers\Customer\CheckoutController;
 use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\Customer\CartController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('customer.home');
@@ -20,18 +21,9 @@ Route::get('/about', AboutUsController::class);
 Route::get('/products', [ProductController::class, 'index'])->name('customer.products.index');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('customer.products.show');
 
-// Checkout
-Route::get('/momo_payment', [CheckoutController::class, 'momopayment']);
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('customer.checkout.index');
-Route::get('/checkout/confirmation', [CheckoutController::class, 'confirmation'])->name('customer.checkout.confirmation');
-Route::get('/checkout/thank-you', [CheckoutController::class, 'friendlyThanks'])->name('customer.checkout.friendlyThanks');
+// Cart
+Route::get('/cart', CartController::class);
 
-// Order
-Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders.index');
-Route::get('/orders/{order}', [OrderController::class, 'show'])->name('customer.orders.details');
-Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('customer.orders.update');
-
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 // Authenticated Routes
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
 
@@ -53,6 +45,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     */
 
-    // Dashboard - If this is for authenticated users, place it here
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('customer.home');
+    // Checkout
+    Route::get('/momo_payment', [CheckoutController::class, 'momopayment']);
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('customer.checkout.index');
+    Route::get('/checkout/confirmation', [CheckoutController::class, 'confirmation'])->name('customer.checkout.confirmation');
+    Route::get('/checkout/thank-you', [CheckoutController::class, 'friendlyThanks'])->name('customer.checkout.friendlyThanks');
+
+    // Order
+    Route::get('/orders', [OrderController::class, 'index'])->name('customer.orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('customer.orders.details');
+    Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('customer.orders.update');
 });

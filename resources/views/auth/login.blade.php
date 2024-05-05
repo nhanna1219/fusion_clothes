@@ -5,7 +5,11 @@
         </x-slot>
 
         <x-validation-errors class="mb-4" />
-        <div class="flex flex-col gap-y-3 items-center font-bold text-[35px] text-[#000]">Log In</div> 
+        <div class="brand flex justify-center">
+            <a href="/" class="flex items-center space-x-4">
+                <img src="{{ asset('storage/black-logo.png') }}" alt="Logo" class="h-32">
+            </a>
+        </div>
 
         @session('status')
             <div class="mb-4 font-medium text-sm text-green-600">
@@ -16,7 +20,7 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <div>
+            <div class="mt-4">
                 <x-label for="email"  value="{{ __('Email') }}" />
                 <x-input id="email"  placeholder="Enter Email Address" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
             </div>
@@ -42,9 +46,9 @@
                 </div>
             </div>
 
-            <div class="block mt-4">
-                <x-button  >
-                    {{ __('Log In') }}
+            <div class="block mt-8">
+                <x-button>
+                    {{ __('Login') }}
                 </x-button>
             </div>
 

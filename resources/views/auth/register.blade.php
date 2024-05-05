@@ -1,17 +1,17 @@
 <x-guest-layout>
     <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-
         <x-validation-errors class="mb-4" />
-        <div class="flex flex-col gap-y-3 items-center font-bold text-[35px] text-[#000]">Sign Up</div>            
+        <div class="brand flex justify-center">
+            <a href="/" class="flex items-center space-x-4">
+                <img src="{{ asset('storage/black-logo.png') }}" alt="Logo" class="h-32">
+            </a>
+        </div>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
             <div>
-                <x-label for="name"  value="{{ __('Name') }}" />
+                <x-label for="name"  value="{{ __('Username') }}" />
                 <x-input id="username" placeholder="Enter Your Name" type="text" name="username" :value="old('name')" required  autocomplete="username" />
             </div>
 
@@ -47,7 +47,7 @@
                 </div>
             @endif
 
-            <div class="flex items-center justify-end mt-4 ">
+            <div class="flex items-center justify-end mt-8">
                 <x-button href="{{ route('login') }}">
                     {{ __('Sign Up') }}
                 </x-button>
@@ -58,7 +58,7 @@
                     {{ __('Log In') }}
                 </a>
             </div>
-            
+
         </form>
     </x-authentication-card>
 </x-guest-layout>
