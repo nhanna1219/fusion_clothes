@@ -1,20 +1,3 @@
-const add = document.getElementById("increment-button");
-const sub = document.getElementById("decrement-button");
-const input = document.getElementById("quantity-input");
-let a = 1;
-
-add.addEventListener("click", () => {
-    a++;
-    input.value = a;
-});
-
-sub.addEventListener("click", () => {
-    if (a > 1) {
-        a--;
-        input.value = a;
-    }
-});
-
 document.addEventListener("DOMContentLoaded", function () {
     var thumbnails = document.querySelectorAll(".thumbnail");
     thumbnails.forEach(function (thumbnail) {
@@ -33,6 +16,25 @@ document.addEventListener("DOMContentLoaded", function () {
             thumbnail.style.transition = "transform 0.3s ease";
         });
     });
+
+    // Adding and subtract item quantity
+    const add = document.getElementById("increment-button");
+    const sub = document.getElementById("decrement-button");
+    const input = document.getElementById("quantity-input");
+    let a = 1;
+    if (add && sub) {
+        add.addEventListener("click", () => {
+            a++;
+            input.value = a;
+        });
+
+        sub.addEventListener("click", () => {
+            if (a > 1) {
+                a--;
+                input.value = a;
+            }
+        });
+    }
 });
 
 function changeImageWithAnimation(newImageSrc) {

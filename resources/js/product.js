@@ -3,7 +3,7 @@ const priceInput = document.querySelectorAll("#price span");
 const range = document.querySelector("#slider #progress");
 let priceGap = 200;
 
-sortProductItems(document.querySelector("#sorting").selectedOptions[0].value);
+sortProductItems(document.querySelector("#sorting")?.selectedOptions[0].value);
 let sliderTimeout;
 
 rangeInput.forEach((input) => {
@@ -57,38 +57,47 @@ function filterProductItems() {
 }
 
 const sortSelect = document.querySelector("#sorting");
-sortSelect.addEventListener("change", () => {
-    const sortCriteria = sortSelect.value;
-    sortProductItems(sortCriteria);
-});
+if (sortSelect) {
+    sortSelect.addEventListener("change", () => {
+        const sortCriteria = sortSelect.value;
+        sortProductItems(sortCriteria);
+    });
+}
 
 function sortProductItems(criteria) {
-    const productItems = document.querySelectorAll("#product-item");
-    const productsWithPrices = Array.from(productItems).map((productItem) => {
-        const priceElement = productItem.querySelector("#product-price");
-        const price = parseFloat(priceElement.textContent.replace("$", ""));
-        return { element: productItem, price: price };
-    });
+    if (criteria) {
+        const productItems = document.querySelectorAll("#product-item");
+        const productsWithPrices = Array.from(productItems).map(
+            (productItem) => {
+                const priceElement =
+                    productItem.querySelector("#product-price");
+                const price = parseFloat(
+                    priceElement.textContent.replace("$", "")
+                );
+                return { element: productItem, price: price };
+            }
+        );
 
-    if (criteria == "Price") {
-        productsWithPrices.sort((a, b) => a.price - b.price);
-    } else {
-        productsWithPrices.sort((a, b) => {
-            const nameA = a.element
-                .querySelector("#product-name")
-                .textContent.toLowerCase();
-            const nameB = b.element
-                .querySelector("#product-name")
-                .textContent.toLowerCase();
-            return nameA.localeCompare(nameB);
+        if (criteria == "Price") {
+            productsWithPrices.sort((a, b) => a.price - b.price);
+        } else {
+            productsWithPrices.sort((a, b) => {
+                const nameA = a.element
+                    .querySelector("#product-name")
+                    .textContent.toLowerCase();
+                const nameB = b.element
+                    .querySelector("#product-name")
+                    .textContent.toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+        }
+
+        const productContainer = document.getElementById("product-container");
+        productContainer.innerHTML = "";
+        productsWithPrices.forEach((product) => {
+            productContainer.appendChild(product.element);
         });
     }
-
-    const productContainer = document.getElementById("product-container");
-    productContainer.innerHTML = "";
-    productsWithPrices.forEach((product) => {
-        productContainer.appendChild(product.element);
-    });
 }
 
 const checkboxes = document.querySelectorAll("input[type=checkbox]");
@@ -110,7 +119,10 @@ const observer = new MutationObserver((mutationsList, observer) => {
     filterByCategory();
 });
 
-observer.observe(filterContainer, { childList: true });
+if (filterContainer) {
+    observer.observe(filterContainer, { childList: true });
+}
+
 function filterByCategory() {
     let selectedCategories = [];
     const filters = document.querySelectorAll("#filter");
@@ -160,15 +172,17 @@ checkboxes.forEach((checkbox) => {
     });
 });
 
-clearFilter.addEventListener("click", () => {
-    let filterItems = filterContainer.querySelectorAll("#filter");
-    filterItems.forEach((item) => {
-        item.remove();
+if (clearFilter) {
+    clearFilter.addEventListener("click", () => {
+        let filterItems = filterContainer.querySelectorAll("#filter");
+        filterItems.forEach((item) => {
+            item.remove();
+        });
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+        });
     });
-    checkboxes.forEach((checkbox) => {
-        checkbox.checked = false;
-    });
-});
+}
 
 window.removeFilter = function (filter) {
     filter.parentNode.remove();

@@ -19,7 +19,7 @@ Route::get('/about', AboutUsController::class);
 
 // Product
 Route::get('/products', [ProductController::class, 'index'])->name('customer.products.index');
-Route::get('/products/{id}', [ProductController::class, 'show'])->name('customer.products.show');
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('customer.products.details');
 
 // Cart
 Route::get('/cart', CartController::class);

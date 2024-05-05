@@ -163,7 +163,7 @@ class ProductController extends Controller
         $perPage = 8;
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $currentPageItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->all();
-        $paginationItems= new LengthAwarePaginator($currentPageItems, count($collection), $perPage);
+        $paginationItems = new LengthAwarePaginator($currentPageItems, count($collection), $perPage);
 
         $paginationItems->withPath(route('customer.products.index'));
 
@@ -174,6 +174,6 @@ class ProductController extends Controller
     {
         $product = Product::with(['category', 'images', 'variants.size', 'variants.color'])->findOrFail($id);
 
-        return view('customer.products.show', compact('product'));
+        return view('customer.products.details', compact('product'));
     }
 }
