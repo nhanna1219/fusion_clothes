@@ -1,10 +1,10 @@
-@props(['usage' => 'card', 'price', 'name', 'type', 'rating', 'image'])
+@props(['usage' => 'card', 'id', 'price', 'name', 'type', 'rating', 'image'])
 <div {{ $attributes->class([
     'relative grid w-full max-w-60 flex-col overflow-hidden place-items-center rounded-lg border border-gray-100 bg-white shadow-md',
     $usage === 'product' ? "before:absolute before:content-[''] before:z-0 before:w-[50%] before:h-[180%] before:rotate-[30deg] before:bg-[#0A0A0A] hover:before:block hover:before:animate-[spinAround_.5s_linear] after:absolute after:content-[''] after:inset-[3px] after:rounded-[6px] after:bg-white after:z-0" : '',
     ($usage === 'new-arrival' || $usage === 'best-seller') ? 'transform transition duration-500 hover:scale-105' : '',
 ]) }}>
-    <a class="mx-3 mt-3 flex h-50 overflow-hidden rounded-xl relative z-10" href="#">
+    <a class="mx-3 mt-3 flex h-50 overflow-hidden rounded-xl relative z-10" href="{{ route('customer.products.details', $id) }}">
         @if ($usage === 'new-arrival')
         <img src="{{ asset('storage/new-arrival-ic.png') }}" class="absolute" width="45" height="45" alt="">
         @elseif($usage === 'best-seller')

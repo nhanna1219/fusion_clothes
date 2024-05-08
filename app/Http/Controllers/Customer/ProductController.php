@@ -56,6 +56,14 @@ class ProductController extends Controller
     {
         $product = Product::with(['category', 'images', 'variants.size', 'variants.color'])->findOrFail($id);
 
-        return view('customer.products.details', compact('product'));
+        $sizes = $product->variants->map(function ($variant) {
+            return optional($variant->size)->size_description;
+        })->unique();
+
+        $colors = $product->variants->map(function ($variant) {
+            return optional($variant->color)->color_name;
+        })->unique();
+
+        return view('customer.products.details', compact('product', 'sizes', 'colors'));
     }
 }

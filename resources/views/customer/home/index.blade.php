@@ -1,5 +1,5 @@
 @php
-    $splitIndex = ceil($products->count() / 2);
+$splitIndex = ceil($products->count() / 2);
 @endphp
 <x-app-layout>
     <x-slot name="header"></x-slot>
@@ -56,26 +56,19 @@
                 <div class="swiper-wrapper px-10 py-12">
                     <!-- Slides -->
                     @foreach ($products as $index => $product)
-                        @if ($index < $splitIndex)
-                            <div class="swiper-slide">
-                                <x-product-item
-                                    usage="new-arrival"
-                                    id="product-item-{{ $product->id }}"
-                                    image="{{ $product->images->first()->image_path }}"
-                                    type="{{ $product->category->name }}"
-                                    rating="4"
-                                    price="{{ $product->price }}"
-                                    name="{{ $product->name }}"
-                                />
-                            </div>
-                        @endif
-                    @endforeach
+                    @if ($index < $splitIndex) <div class="swiper-slide">
+                        <x-product-item usage="new-arrival" id="{{$product->id}}"
+                            image="{{ $product->images->first()->image_path }}" type="{{ $product->category->name }}"
+                            rating="4" price="{{ $product->price }}" name="{{ $product->name }}" />
                 </div>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
+                @endif
+                @endforeach
             </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
         </div>
+    </div>
     </div>
 
     <div id="best-seller" class="container">
@@ -92,19 +85,13 @@
                 <div class="swiper-wrapper px-10 py-12">
                     <!-- Slides -->
                     @foreach ($products as $index => $product)
-                        @if ($index >= $splitIndex)
-                            <div class="swiper-slide">
-                                <x-product-item
-                                    usage="best-seller"
-                                    id="product-item-{{ $product->id }}"
-                                    image="{{ $product->images->first()->image_path }}"
-                                    type="{{ $product->category->name }}"
-                                    rating="4"
-                                    price="{{ $product->price }}"
-                                    name="{{ $product->name }}"
-                                />
-                            </div>
-                        @endif
+                    @if ($index >= $splitIndex)
+                    <div class="swiper-slide">
+                        <x-product-item usage="best-seller" id="{{$product->id}}"
+                            image="{{ $product->images->first()->image_path }}" type="{{ $product->category->name }}"
+                            rating="4" price="{{ $product->price }}" name="{{ $product->name }}" />
+                    </div>
+                    @endif
                     @endforeach
                 </div>
                 <div class="swiper-pagination"></div>
@@ -182,16 +169,18 @@
     {{-- <div>
         <h1>Home Page</h1>
         @guest
-            <p>Welcome! Feel free to <a href="{{ route('login') }}">login</a> or <a href="{{ route('register') }}">register</a>.</p>
-        @endguest
+            <p>Welcome! Feel free to <a href="{{ route('login') }}">login</a> or <a
+        href="{{ route('register') }}">register</a>.</p>
+    @endguest
 
-        @auth
-            <p>Welcome back, {{ Auth::user()->name }}!</p>
-        @endauth
+    @auth
+    <p>Welcome back, {{ Auth::user()->name }}!</p>
+    @endauth
     </div> --}}
 
     {{-- Testimonial --}}
     {{-- <video class="mx-auto" width="300" height="240" autoplay>
-        <source src="{{asset ('storage/Snapinsta.app_video_318846414_1147318316261636_7364778221521439841_n.mp4')}}" type="video/mp4">
+        <source src="{{asset ('storage/Snapinsta.app_video_318846414_1147318316261636_7364778221521439841_n.mp4')}}"
+    type="video/mp4">
     </video> --}}
 </x-app-layout>
