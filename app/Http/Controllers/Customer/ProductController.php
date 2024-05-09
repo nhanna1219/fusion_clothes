@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
@@ -23,24 +25,24 @@ class ProductController extends Controller
         $max = explode(',', $range)[1];
 
         $products = Product::with(['category', 'images']);
-        
+
         if (!empty($q_categories) && empty($q_filters)) {
-                $products->whereHas('category', function ($query) use ($q_categories) {
-                    $query->whereHas('parent', function ($query) use ($q_categories) {
-                        $query->whereIn('name', explode(',', $q_categories));
-                    });
-                })->get();
+            $products->whereHas('category', function ($query) use ($q_categories) {
+                $query->whereHas('parent', function ($query) use ($q_categories) {
+                    $query->whereIn('name', explode(',', $q_categories));
+                });
+            })->get();
         } elseif (empty($q_categories) && !empty($q_filters)) {
             $products->join('product_categories', 'products.category_id', '=', 'product_categories.id')
-                    ->whereIn('product_categories.name', explode(',', $q_filters))
-                    ->select('products.*')
-                    ->get();
-        } else if (!empty($q_categories) && !empty($q_filters)){
+                ->whereIn('product_categories.name', explode(',', $q_filters))
+                ->select('products.*')
+                ->get();
+        } else if (!empty($q_categories) && !empty($q_filters)) {
             $products->whereHas('category', function ($query) use ($q_filters, $q_categories) {
                 $query->whereIn('name', explode(',', $q_filters))
-                      ->whereHas('parent', function ($query) use ($q_categories) {
-                          $query->whereIn('name', explode(',', $q_categories));
-                      });
+                    ->whereHas('parent', function ($query) use ($q_categories) {
+                        $query->whereIn('name', explode(',', $q_categories));
+                    });
             })->get();
         }
 
@@ -54,6 +56,10 @@ class ProductController extends Controller
 
     public function show(Request $request, $id): View
     {
+        // if ($request->has('buy_now')) {
+        //     return $this->buyNow($request, $id);
+        // }
+
         $product = Product::with(['category', 'images', 'variants.size', 'variants.color'])->findOrFail($id);
 
         $sizes = $product->variants->map(function ($variant) {

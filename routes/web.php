@@ -25,6 +25,7 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->name('customer
 // Cart
 Route::get('/cart', CartController::class);
 
+
 // Authenticated Routes
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
 
@@ -45,6 +46,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('customer.orders.update');
 
     */
+    Route::get('/buynow/{id}', [CartController::class, 'show'])->name('customer.cart.buynow');
 
     // Checkout
     Route::get('/momo_payment', [CheckoutController::class, 'momopayment']);
