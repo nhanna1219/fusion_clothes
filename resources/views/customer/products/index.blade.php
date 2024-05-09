@@ -97,7 +97,7 @@
                     @if (count($products) > 0)
                         @foreach ($products as $product)
                             <x-product-item 
-                                usage="product" id="product-item product-item-{{ $product->id }}" 
+                                usage="product" id="{{ $product->id }}" 
                                 image="{{ $product->images->first()->image_path }}"
                                 type="{{ $product->category->name }}"
                                 rating="4"
@@ -115,7 +115,7 @@
     <form id="form-filter" method="get">
         <input type="hidden" name="filters" id="filters" value="{{$q_filters}}">
         <input type="hidden" name="categories" id="categories" value="{{ $q_categories}}">
-        <input type="hidden" name="range" id="range" value="" />
+        <input type="hidden" name="range" id="range" value="{{ $range }}" />
         <input type="hidden" name="sort" id="sort" value="{{ $sort }}" />
     </form>
     <script>
