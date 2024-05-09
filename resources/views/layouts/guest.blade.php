@@ -9,6 +9,9 @@
 
         <!-- Fonts -->
         <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'>
+        {{-- Favicon --}}
+        <link rel="icon" type="image/x-icon" href="{{asset ('storage/black-logo.png')}}" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/x-icon" href="{{asset ('storage/light-logo.png')}}" media="(prefers-color-scheme: dark)">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -16,7 +19,7 @@
         @livewireStyles
     </head>
     <body>
-        <div class="flex flex-col min-h-screen">
+        <div class="flex flex-col min-h-screen bg-[#eee]">
             <x-header />
             <div class="flex-1 p-10 text-gray-900 antialiased">
                 {{ $slot }}

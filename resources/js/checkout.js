@@ -17,9 +17,9 @@ async function getCommune(idDistrict) {
     return communeList;
 }
 
-document
-    .querySelector("#city-province")
-    .addEventListener("change", async () => {
+let cityProv = document.getElementById("city-province");
+if (cityProv) {
+    cityProv.addEventListener("change", async () => {
         const idProvince = document.querySelector("#city-province").value;
         let outputCommune = "<option value='0'>&nbspSelect Ward</option>";
         document.querySelector("#ward-commune").innerHTML = outputCommune;
@@ -32,10 +32,11 @@ document
         }
         document.querySelector("#district-town").innerHTML = outputDistrict;
     });
+}
 
-document
-    .querySelector("#district-town")
-    .addEventListener("change", async () => {
+let districtTown = document.getElementById("district-town");
+if (districtTown) {
+    districtTown.addEventListener("change", async () => {
         const idDistrict = document.querySelector("#district-town").value;
         const communeList = (await getCommune(idDistrict)) || [];
         let outputCommune = "<option value='0'>&nbspSelect Ward</option>";
@@ -46,3 +47,4 @@ document
         }
         document.querySelector("#ward-commune").innerHTML = outputCommune;
     });
+}

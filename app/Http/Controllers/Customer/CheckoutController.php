@@ -5,9 +5,35 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Requests\CheckoutStoreRequest;
+use App\Models\UserAddress;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
+    public function index(Request $request): View
+    {
+
+        return view('customer.checkout.index');
+    }
+
+    public function confirmation(Request $request): View
+    {
+        $userAddresses = UserAddress::where('user_id', Auth::id())->get();
+        $user = Auth::user();
+        return view('customer.checkout.confirmation', compact('userAddresses', 'user'));
+    }
+    public function store(CheckoutStoreRequest $request): RedirectResponse
+    {
+        $userAddress = UserAddress::create($request->validated() + ['user_id' => Auth::id()]);
+        return redirect()->route('customer.checkout.friendlyThanks');
+    }
+    public function friendlyThanks(Request $request): View
+    {
+        return view('customer.checkout.friendlyThanks');
+    }
     public function execPostRequest($url, $data)
     {
         $ch = curl_init($url);
@@ -34,8 +60,6 @@ class CheckoutController extends Controller
     public function momopayment()
     {
 
-        // include "../common/helper.php";
-
         $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
 
 
@@ -54,7 +78,7 @@ class CheckoutController extends Controller
         $requestType = "payWithMoMoATM";
         $extraData = "";
         //before sign HMAC SHA256 signature
-        $rawHashArr =  array(
+        $rawHashArr = array(
             'partnerCode' => $partnerCode,
             'accessKey' => $accessKey,
             'requestId' => $requestId,
@@ -71,7 +95,7 @@ class CheckoutController extends Controller
         $rawHash = "partnerCode=" . $partnerCode . "&accessKey=" . $accessKey . "&requestId=" . $requestId . "&bankCode=" . $bankCode . "&amount=" . $amount . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&returnUrl=" . $returnUrl . "&notifyUrl=" . $notifyurl . "&extraData=" . $extraData . "&requestType=" . $requestType;
         $signature = hash_hmac("sha256", $rawHash, $secretKey);
 
-        $data =  array(
+        $data = array(
             'partnerCode' => $partnerCode,
             'accessKey' => $accessKey,
             'requestId' => $requestId,
@@ -98,26 +122,5 @@ class CheckoutController extends Controller
                 error_log('payUrl does not exist in the response');
             }
         }
-    }
-
-
-    public function friendlyThanks()
-    {
-        return view('customer.checkout.friendlyThanks');
-    }
-
-
-    public function index()
-    {
-        // if (!Auth::check()) {
-        //     // User is not logged in, redirect to login page
-        //     return redirect()->route('login')->with('error', 'Please login to proceed to checkout.');
-        // }
-        return view('customer.checkout.index');
-    }
-    public function confirmation()
-    {
-
-        return view('customer.checkout.confirmation');
     }
 }

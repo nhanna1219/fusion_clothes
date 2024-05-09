@@ -1,4 +1,3 @@
-
 .nav-icon {
     width: 20px;
     height: 20px;
@@ -39,6 +38,14 @@
     -webkit-text-fill-color: transparent;
 }
 
-.new-arrival{
+#new-arrival, #testimonial{
     background-color: #eeeeee4f;
+}
+
+
+.swiper-button-prev {
+    left: 0 !important;
+}
+.swiper-button-next {
+    right: 0 !important;
 }

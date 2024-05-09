@@ -1,0 +1,75 @@
+created:
+    - app/Http/Controllers/AboutUsController.php
+    - app/Http/Controllers/CartItemController.php
+    - app/Http/Controllers/CheckoutController.php
+    - app/Http/Controllers/HomeController.php
+    - app/Http/Controllers/OrderController.php
+    - app/Http/Controllers/ProductController.php
+    - database/factories/CartItemFactory.php
+    - database/factories/OrderDetailFactory.php
+    - database/factories/OrderFactory.php
+    - database/factories/PaymentDetailFactory.php
+    - database/factories/ProductCategoryFactory.php
+    - database/factories/ProductColorFactory.php
+    - database/factories/ProductImageFactory.php
+    - database/factories/ProductSizeFactory.php
+    - database/factories/ProductVariantFactory.php
+    - database/factories/ProductFactory.php
+    - database/factories/UserAddressFactory.php
+    - database/factories/UserRoleFactory.php
+    - database/migrations/2024_05_04_093032_create_cart_items_table.php
+    - database/migrations/2024_05_04_093033_create_order_details_table.php
+    - database/migrations/2024_05_04_093034_create_orders_table.php
+    - database/migrations/2024_05_04_093035_create_payment_details_table.php
+    - database/migrations/2024_05_04_093036_create_product_categories_table.php
+    - database/migrations/2024_05_04_093037_create_product_colors_table.php
+    - database/migrations/2024_05_04_093038_create_product_images_table.php
+    - database/migrations/2024_05_04_093039_create_product_sizes_table.php
+    - database/migrations/2024_05_04_093040_create_product_variants_table.php
+    - database/migrations/2024_05_04_093041_create_products_table.php
+    - database/migrations/2024_05_04_093042_create_user_addresses_table.php
+    - database/migrations/2024_05_04_093043_create_user_roles_table.php
+    - app/Models/CartItem.php
+    - app/Models/OrderDetail.php
+    - app/Models/Order.php
+    - app/Models/PaymentDetail.php
+    - app/Models/ProductCategory.php
+    - app/Models/ProductColor.php
+    - app/Models/ProductImage.php
+    - app/Models/ProductSize.php
+    - app/Models/ProductVariant.php
+    - app/Models/Product.php
+    - app/Models/UserAddress.php
+    - app/Models/UserRole.php
+    - tests/Feature/Http/Controllers/AboutUsControllerTest.php
+    - tests/Feature/Http/Controllers/CartItemControllerTest.php
+    - tests/Feature/Http/Controllers/CheckoutControllerTest.php
+    - tests/Feature/Http/Controllers/HomeControllerTest.php
+    - tests/Feature/Http/Controllers/OrderControllerTest.php
+    - tests/Feature/Http/Controllers/ProductControllerTest.php
+updated:
+    - routes/web.php
+skipped:
+    - resources/views/customer/about/index.blade.php
+    - resources/views/customer/cart/index.blade.php
+    - resources/views/customer/checkout/index.blade.php
+    - resources/views/customer/checkout/confirmation.blade.php
+    - resources/views/customer/home/index.blade.php
+    - resources/views/customer/orders/index.blade.php
+    - resources/views/customer/orders/details.blade.php
+    - resources/views/customer/orders/history.blade.php
+    - resources/views/customer/products/index.blade.php
+    - resources/views/customer/products/details.blade.php
+models:
+    CartItem: { id: id, session_id: 'id foreign:sessions', product_variant_id: 'id foreign:product_variants', quantity: integer, created_at: timestamp, modified_at: timestamp }
+    OrderDetail: { id: id, order_id: 'id foreign:order_details', product_id: 'id foreign:product_variants', quantity: integer, created_at: timestamp, modified_at: timestamp }
+    Order: { id: id, user_id: 'id foreign:users', status: 'string:20', total: 'decimal:10,2', created_at: timestamp, modified_at: timestamp }
+    PaymentDetail: { id: id, order_id: 'id foreign:orders', amount: 'decimal:10,2', status: 'string:50', created_at: timestamp, modified_at: timestamp }
+    ProductCategory: { id: id, name: 'string:255', desc: 'text nullable', parent_id: 'id foreign:product_categories nullable', created_at: timestamp, modified_at: timestamp, deleted_at: 'timestamp nullable' }
+    ProductColor: { id: id, color_name: 'string:50 nullable' }
+    ProductImage: { id: 'id:bigint', product_id: 'id foreign:products', image_path: 'string:255', created_at: 'timestamp nullable', updated_at: 'timestamp nullable' }
+    ProductSize: { id: id, size_description: 'string:50 nullable' }
+    ProductVariant: { id: id, product_id: 'id foreign:products', size_id: 'id foreign:product_sizes nullable', color_id: 'id foreign:product_colors nullable', quantity: integer }
+    Product: { id: id, name: 'string:255', description: 'text nullable', category_id: 'id foreign:product_categories', price: 'decimal:10,2', created_at: timestamp, modified_at: timestamp, deleted_at: 'timestamp nullable' }
+    UserAddress: { id: id, user_id: 'id foreign:users', address_line1: 'string:255 nullable', address_line2: 'string:255 nullable', city: 'string:255 nullable', postal_code: 'string:12 nullable', country: 'string:255 nullable', phone: 'string:20 nullable' }
+    UserRole: { id: id, role_name: 'string:255', description: 'text nullable' }

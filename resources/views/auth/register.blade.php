@@ -1,33 +1,33 @@
 <x-guest-layout>
     <x-authentication-card>
+        <x-validation-errors class="mb-4" />
+        <div class="brand flex justify-center">
+            <a href="/" class="flex items-center space-x-4">
+                <img src="{{ asset('storage/black-logo.png') }}" alt="Logo" class="h-32">
+            </a>
+        </div>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
-            <div class="flex flex-col gap-y-3 items-center font-bold text-[35px] text-[#000]">Sign Up</div>
-            
+
             <div>
-                <x-label class="font-semibold text-[18px] text-[#000]" for="name" value="{{ __('Name') }}" />
-                <input id="name" class="block mt-2 w-full rounded-none text-[15px] border-gray-300 focus:border-[#000] focus:ring-[#000]" placeholder="Enter Your Name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                <x-label for="name"  value="{{ __('Username') }}" />
+                <x-input id="username" placeholder="Enter Your Name" type="text" name="username" :value="old('name')" required  autocomplete="username" />
             </div>
 
             <div class="mt-4">
-                <x-label class="font-semibold text-[18px] text-[#000]" for="email" value="{{ __('Email') }}" />
-                <input id="email" class="block mt-2 w-full rounded-none text-[15px] border-gray-300 focus:border-[#000] focus:ring-[#000]" placeholder="Enter Email Address" type="email" name="email" :value="old('email')" required autocomplete="username" />
+                <x-label for="email"  value="{{ __('Email') }}" />
+                <x-input id="email"  placeholder="Enter Email Address" type="email" name="email" :value="old('email')" required autocomplete="email" />
             </div>
 
             <div class="mt-4">
-                <x-label class="font-semibold text-[18px] text-[#000]" for="phone" value="{{ __('Phone') }}" />
-                <input id="email" class="block mt-2 w-full rounded-none text-[15px] border-gray-300 focus:border-[#000] focus:ring-[#000]" placeholder="Enter Phone Number" type="email" name="email" :value="old('email')" required autocomplete="phone" />
+                <x-label for="password"  value="{{ __('Password') }}" />
+                <x-input id="password"  placeholder="Enter Password" type="password" name="password" required autocomplete="new-password" />
             </div>
 
             <div class="mt-4">
-                <x-label class="font-semibold text-[18px] text-[#000]" for="password" value="{{ __('Password') }}" />
-                <input id="password" class="block mt-2 w-full rounded-none text-[15px] border-gray-300 focus:border-[#000] focus:ring-[#000]" placeholder="Enter Password" type="password" name="password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <x-label class="font-semibold text-[18px] text-[#000]" for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <input id="password_confirmation" class="block mt-2 w-full rounded-none text-[15px] border-gray-300 focus:border-[#000] focus:ring-[#000]" placeholder="Enter Password" type="password" name="password_confirmation" required autocomplete="new-password" />
+                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
+                <x-input id="password_confirmation" placeholder="Enter Password" type="password" name="password_confirmation" required autocomplete="new-password" />
             </div>
 
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
@@ -47,20 +47,18 @@
                 </div>
             @endif
 
-            <div class="flex items-center justify-end mt-6">                
-                <button type="submit" class="w-full inline-block items-center px-4 py-2 bg-[#000] border border-transparent rounded-none  text-[15px] text-white tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-[#000] focus:ring-offset-2 transition ease-in-out duration-150 ">
-                     {{ __('Sign Up') }}
-                </button>
+            <div class="flex items-center justify-end mt-8">
+                <x-button href="{{ route('login') }}">
+                    {{ __('Sign Up') }}
+                </x-button>
             </div>
-
-            <div class="mt-10 text-center">
-                <span class="text-[14px] text-[#000] ml-2">{{ __("Already have an account?") }}</span>
-
+            <div class="text-center mt-4">
+                <span class="text-[14px] text-[#000] ml-2 inline-flex và items-center">{{ __("Already have an account?") }}</span>
                 <a class="underline text-[14px] text-[#000] font-bold hover:text-gray-900 rounded-md focus:outline-none " href="{{ route('login') }}">
                     {{ __('Log In') }}
                 </a>
-
             </div>
+
         </form>
     </x-authentication-card>
 </x-guest-layout>

@@ -25,7 +25,6 @@
         <x-banner />
 
         <div class="min-h-screen flex flex-col">
-            {{-- @livewire('navigation-menu') --}}
 
             <!-- Page Heading -->
             @if (isset($header))
