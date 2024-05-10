@@ -10,6 +10,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -74,6 +76,14 @@ class ProductCategoryResource extends Resource
             ]);
     }
 
+    public static function infoList(Infolist $infoList): Infolist
+    {
+        return $infoList
+                ->schema([
+                    TextEntry::make('name'),
+                    TextEntry::make('parent.name')->label('Belongs To')
+                ]);
+    }
     public static function getRelations(): array
     {
         return [
@@ -86,7 +96,7 @@ class ProductCategoryResource extends Resource
         return [
             'index' => Pages\ListProductCategories::route('/'),
             'create' => Pages\CreateProductCategory::route('/create'),
-            'view' => Pages\ViewProductCategory::route('/{record}'),
+            // 'view' => Pages\ViewProductCategory::route('/{record}'),
             'edit' => Pages\EditProductCategory::route('/{record}/edit'),
         ];
     }

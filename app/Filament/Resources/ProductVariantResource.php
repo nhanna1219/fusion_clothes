@@ -85,7 +85,7 @@ class ProductVariantResource extends Resource
         return [
             'index' => Pages\ListProductVariants::route('/'),
             'create' => Pages\CreateProductVariant::route('/create'),
-            'view' => Pages\ViewProductVariant::route('/{record}'),
+            // 'view' => Pages\ViewProductVariant::route('/{record}'),
             'edit' => Pages\EditProductVariant::route('/{record}/edit'),
         ];
     }

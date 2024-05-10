@@ -65,7 +65,7 @@ class ProductSizeResource extends Resource
         return [
             'index' => Pages\ListProductSizes::route('/'),
             'create' => Pages\CreateProductSize::route('/create'),
-            'view' => Pages\ViewProductSize::route('/{record}'),
+            // 'view' => Pages\ViewProductSize::route('/{record}'),
             'edit' => Pages\EditProductSize::route('/{record}/edit'),
         ];
     }

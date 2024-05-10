@@ -79,7 +79,7 @@ class ProductImageResource extends Resource
         return [
             'index' => Pages\ListProductImages::route('/'),
             'create' => Pages\CreateProductImage::route('/create'),
-            'view' => Pages\ViewProductImage::route('/{record}'),
+            // 'view' => Pages\ViewProductImage::route('/{record}'),
             'edit' => Pages\EditProductImage::route('/{record}/edit'),
         ];
     }

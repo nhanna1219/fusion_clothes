@@ -26,11 +26,11 @@ class ProductResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
                 Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name')
                     ->required(),
+                Forms\Components\Textarea::make('description')
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('price')
                     ->required()
                     ->numeric()
@@ -89,7 +89,7 @@ class ProductResource extends Resource
         return [
             'index' => Pages\ListProducts::route('/'),
             'create' => Pages\CreateProduct::route('/create'),
-            'view' => Pages\ViewProduct::route('/{record}'),
+            // 'view' => Pages\ViewProduct::route('/{record}'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
     }

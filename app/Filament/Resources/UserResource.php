@@ -6,7 +6,10 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Infolists\Components\Section;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -25,10 +28,6 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Account')
                     ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->maxLength(255)
-                            ->default(null)->columnSpanFull(),
                         Forms\Components\TextInput::make('email')
                             ->email()
                             ->required()
@@ -37,6 +36,18 @@ class UserResource extends Resource
                             ->password()
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
+                            ->default(null),
+                        Forms\Components\Select::make('role_id')
+                            ->options([
+                                'Admin' => '1',
+                                'User' => '2',
+                            ])
+                            ->native(false)
+                            ->required()
+                            ->default(2),
                     ])->columns(2),    
                 Forms\Components\Section::make('Information')
                     ->schema([
@@ -51,15 +62,6 @@ class UserResource extends Resource
                             ->maxLength(255)
                             ->default(null)->columnSpanFull(),
                     ])->columns(2),
-                Forms\Components\Select::make('role_id')
-                    ->options([
-                        'Admin' => '1',
-                        'User' => '2',
-                    ])
-                    ->native(false)
-                    ->required()
-                    ->default(2),
-                
             ]);
     }
 
@@ -94,6 +96,25 @@ class UserResource extends Resource
                 ]),
             ]);
     }
+    
+    public static function infoList(Infolist $infoList): Infolist
+    {
+        return $infoList
+                ->schema([
+                    Section::make('Account')
+                    ->schema([
+                        TextEntry::make('name'),
+                        TextEntry::make('email'),
+                        TextEntry::make('role_id'),
+                    ])->columns(2),
+                    Section::make('Informations')
+                    ->schema([
+                        TextEntry::make('first_name'),
+                        TextEntry::make('last_name'),
+                        TextEntry::make('phone'),
+                    ])->columns(2),
+                ]);
+    }
 
     public static function getRelations(): array
     {
@@ -107,7 +128,7 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
+            // 'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
