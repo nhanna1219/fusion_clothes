@@ -30,8 +30,8 @@ class ProductImageResource extends Resource
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'name')
                     ->required(),
-                Forms\Components\FileUpload::make('image_path')
-                    ->image()
+                Forms\Components\TextInput::make('image_path')
+                    ->maxLength(255)
                     ->required(),
             ]);
     }
@@ -43,7 +43,7 @@ class ProductImageResource extends Resource
                 Tables\Columns\TextColumn::make('product.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('image_path'),
+                Tables\Columns\TextColumn::make('image_path'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

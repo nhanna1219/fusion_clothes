@@ -13,16 +13,22 @@ class OrdersChart extends ChartWidget
 
     protected static ?int $sort = 2;
 
+    protected int | string | array $columnSpan = 'full';
+
     protected function getData(): array
     {
         $data = Trend::model(Order::class)
             ->between(
-                start: now()->startOfMonth(),
-                end: now()->endOfMonth(),
+                start: now()->startOfYear(),
+                end: now()->endOfYear(),
             )
-            ->perDay()
+            ->perMonth()
             ->count();
-    
+
+        $labels = $data->map(function (TrendValue $value) {
+            return date('M', strtotime($value->date));
+        });
+
         return [
             'datasets' => [
                 [
@@ -30,9 +36,10 @@ class OrdersChart extends ChartWidget
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
-            'labels' => $data->map(fn (TrendValue $value) => $value->date),
+            'labels' => $labels,
         ];
     }
+
 
     protected function getType(): string
     {
