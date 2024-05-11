@@ -56,3 +56,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('customer.orders.details');
     Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('customer.orders.update');
 });
+
+

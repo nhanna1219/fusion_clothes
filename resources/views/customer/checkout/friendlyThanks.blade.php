@@ -14,7 +14,7 @@
         <p class =" sentence1">Your order is completed!</p>
         <p class =" sentence2">Thanks you. Your order has been received</p>
         </div>
-        <div class="in4order ">
+        <div class="in4order rounded">
             <div class=" items">
                 <p>Order ID</p>
                 <p>#GM123456</p>
@@ -31,7 +31,7 @@
                 <p>Estimated Delivery Date</p>
                 <p>12/04/2024</p>
             </div>
-            <div class="download"> <Button>Download Invoice</Button></div>
+            <div class="download rounded"> <Button>Download Invoice</Button></div>
 
 
         </div>
