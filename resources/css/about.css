@@ -1,6 +1,4 @@
-.img{
-    width: 80%;
-}
+
 .img1{
     background-image: url("../../public/storage/products/men/jackets/shadow_denim_jacket_1.jpg");
     background-position: center;
@@ -43,9 +41,7 @@
     display: block;
     margin-right: 50px;
 }
-/* .detail{
-    width: 700px;
-} */
+
 .icon1{
     width: 150px;
     height: 150px;
