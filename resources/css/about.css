@@ -1,0 +1,48 @@
+
+.img1{
+    background-image: url("../../public/storage/products/men/jackets/shadow_denim_jacket_1.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 500px;
+    width: 500px;
+    display: block;
+}
+.img2{
+    background-image: url("../../public/storage/products/men/handbags/basic_leather_bag_4.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 235px;
+    width: 670px;
+    display: block;
+}
+
+.img3{
+    background-image: url("../../public/storage/products/men/watches/serenity_timepiece_watch_1.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 235px;
+    width: 670px;
+    display: block;
+}
+.bang{
+    width: 980px;
+}
+
+.anh{
+    background-image: url("../../public/storage/products/women/jackets/fluffy_fox_fur_jacket_3.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 650px;
+    width: 650px;
+    display: block;
+    margin-right: 50px;
+}
+
+.icon1{
+    width: 150px;
+    height: 150px;
+}

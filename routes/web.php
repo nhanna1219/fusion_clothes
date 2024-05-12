@@ -59,32 +59,3 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('customer.orders.details');
     Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('customer.orders.update');
 });
-
-// Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified','admin'])->group(function () {
- 
-
-    
-
-
-//Product Management
-// Route::get('/admin', [ProductManagementController::class, 'product_list'])->name('admin.product_management.product_list');
-// Route::get('/admin/product_list', function () {
-//     return redirect('/admin');
-// });
-// Route::get('/admin/add_product', [ProductManagementController::class, 'add_product'])->name('admin.product_management.add_product');
-// Route::get('/admin/edit_product', [ProductManagementController::class, 'edit_product'])->name('admin.product_management.edit_product');
-
-// //Customer Management
-// Route::get('/admin/customer_list', [CustomerManagementController::class, 'customer_list'])->name('admin.customer_management.customer_list');
-
-// //Order Management
-// Route::get('/admin/order_processing', [OrderManagementController::class, 'order_processing'])->name('admin.order_management.order_processing');
-// Route::get('/admin/order_completed', [OrderManagementController::class, 'order_completed'])->name('admin.order_management.order_completed');
-// Route::get('/admin/order_details', [OrderManagementController::class, 'order_details'])->name('admin.order_management.order_details');
-
-// //Statistics
-// Route::get('/admin/statistics', [StatisticsReportsManagementController::class, 'statistics'])->name('admin.statistics_reports.statistics');
-
-// //Reports
-// Route::get('/admin/reports', [StatisticsReportsManagementController::class, 'reports'])->name('admin.statistics_reports.reports');
-// // });
