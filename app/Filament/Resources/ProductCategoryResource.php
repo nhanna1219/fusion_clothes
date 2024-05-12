@@ -35,8 +35,12 @@ class ProductCategoryResource extends Resource
                 Forms\Components\Textarea::make('desc')
                     ->columnSpanFull(),
                 Forms\Components\Select::make('parent_id')
-                    ->relationship('parent', 'name')
-                    ->default(null),
+                ->options(
+                    ProductCategory::whereIn('parent_id', [1, 2])
+                        ->pluck('name', 'id')
+                        ->toArray()
+                )
+                ->default(null),
             ]);
     }
 
