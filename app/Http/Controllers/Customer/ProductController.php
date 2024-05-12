@@ -3,177 +3,73 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
     public function index(Request $request): View
     {
-        // $products = Product::with(['category', 'images'])->paginate(8);
+        $size = 8;
+        $q_filters = $request->query('filters') ? $request->query('filters') : "";
+        $q_categories = $request->query('categories') ? $request->query('categories') : "";
+        $range = $request->query('range') ? $request->query('range') : "0,1000";
+        $sort = $request->query('sort') ? $request->query('sort') : "price";
 
-        $data = [
-            [
-                'image' => 'product_image.png',
-                'type' => 'Coats',
-                'rating' => 4.8,
-                'price' => 230,
-                'name' => 'Ugly Black Coat'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Coats',
-                'rating' => 4.8,
-                'price' => 102,
-                'name' => 'Trendy Black Coat'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Coats',
-                'rating' => 4.8,
-                'price' => 52,
-                'name' => 'Beautify Red Coat'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Coats',
-                'rating' => 4.8,
-                'price' => 521,
-                'name' => 'Wonderful Blue Coat'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Coats',
-                'rating' => 4.8,
-                'price' => 839,
-                'name' => 'Awesome Brown Coat'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'T-Shirts',
-                'rating' => 4.3,
-                'price' => 175,
-                'name' => 'Classic White T-Shirt'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'T-Shirts',
-                'rating' => 4.5,
-                'price' => 99,
-                'name' => 'Vintage Black T-Shirt'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'T-Shirts',
-                'rating' => 4.1,
-                'price' => 120,
-                'name' => 'Striped Blue T-Shirt'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'T-Shirts',
-                'rating' => 4.7,
-                'price' => 85,
-                'name' => 'Graphic Print T-Shirt'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'T-Shirts',
-                'rating' => 4.6,
-                'price' => 200,
-                'name' => 'Slim Fit Grey T-Shirt'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Handbags',
-                'rating' => 4.9,
-                'price' => 350,
-                'name' => 'Leather Shoulder Bag'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Handbags',
-                'rating' => 4.7,
-                'price' => 280,
-                'name' => 'Tote Bag'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Handbags',
-                'rating' => 4.6,
-                'price' => 200,
-                'name' => 'Crossbody Bag'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Handbags',
-                'rating' => 4.8,
-                'price' => 450,
-                'name' => 'Satchel Bag'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Handbags',
-                'rating' => 4.5,
-                'price' => 310,
-                'name' => 'Backpack'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Jackets',
-                'rating' => 4.8,
-                'price' => 460,
-                'name' => 'Denim Jacket'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Jackets',
-                'rating' => 4.7,
-                'price' => 580,
-                'name' => 'Leather Jacket'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Jackets',
-                'rating' => 4.6,
-                'price' => 390,
-                'name' => 'Bomber Jacket'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Jackets',
-                'rating' => 4.9,
-                'price' => 670,
-                'name' => 'Parka Coat'
-            ],
-            [
-                'image' => 'product_image.png',
-                'type' => 'Jackets',
-                'rating' => 4.5,
-                'price' => 520,
-                'name' => 'Quilted Jacket'
-            ],
-        ];
+        $min = explode(',', $range)[0];
+        $max = explode(',', $range)[1];
 
-        $collection = collect($data);
+        $products = Product::with(['category', 'images']);
 
-        $perPage = 8;
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentPageItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->all();
-        $paginationItems = new LengthAwarePaginator($currentPageItems, count($collection), $perPage);
+        if (!empty($q_categories) && empty($q_filters)) {
+            $products->whereHas('category', function ($query) use ($q_categories) {
+                $query->whereHas('parent', function ($query) use ($q_categories) {
+                    $query->whereIn('name', explode(',', $q_categories));
+                });
+            })->get();
+        } elseif (empty($q_categories) && !empty($q_filters)) {
+            $products->join('product_categories', 'products.category_id', '=', 'product_categories.id')
+                ->whereIn('product_categories.name', explode(',', $q_filters))
+                ->select('products.*')
+                ->get();
+        } else if (!empty($q_categories) && !empty($q_filters)) {
+            $products->whereHas('category', function ($query) use ($q_filters, $q_categories) {
+                $query->whereIn('name', explode(',', $q_filters))
+                    ->whereHas('parent', function ($query) use ($q_categories) {
+                        $query->whereIn('name', explode(',', $q_categories));
+                    });
+            })->get();
+        }
 
-        $paginationItems->withPath(route('customer.products.index'));
+        $products = $products->whereBetween('price', array($min, $max))->orderBy($sort)->paginate($size);
 
-        return view('customer.products.index', compact('paginationItems'));
+        $childCategories = ProductCategory::whereNotNull('parent_id')->select('name')->distinct()->get();
+        $parentCategories = ProductCategory::whereNull('parent_id')->get();
+
+        return view('customer.products.index', compact('products', 'childCategories', 'parentCategories', 'q_categories', 'q_filters', 'range', 'sort'));
     }
 
     public function show(Request $request, $id): View
     {
+        // if ($request->has('buy_now')) {
+        //     return $this->buyNow($request, $id);
+        // }
+
         $product = Product::with(['category', 'images', 'variants.size', 'variants.color'])->findOrFail($id);
 
-        return view('customer.products.details', compact('product'));
+        $sizes = $product->variants->map(function ($variant) {
+            return optional($variant->size)->size_description;
+        })->unique();
+
+        $colors = $product->variants->map(function ($variant) {
+            return optional($variant->color)->color_name;
+        })->unique();
+
+        return view('customer.products.details', compact('product', 'sizes', 'colors'));
     }
 }

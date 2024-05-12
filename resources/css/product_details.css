@@ -23,7 +23,9 @@
     border: 1.5px solid black;
 }
 .small-img img {
-    width: inherit;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     cursor: pointer;
     transition: all 0.3s ease;
 }

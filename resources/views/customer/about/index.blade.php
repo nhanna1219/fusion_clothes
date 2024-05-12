@@ -95,12 +95,12 @@
             </div>
             <div class="member flex justify-center">
                 
-                <div class="co-founder1 mr-5"></div>
+                <div class="co-founder1 mr-5 block"></div>
                     <div><img src="{{asset ('storage/member_img2.jpg')}}" alt=""
                     class ="w-96 h-96 object-cover"></div>
-                   <!-- <p>Trần Giáp Minh</p>
+                   <p>Trần Giáp Minh</p>
                    <p>Co-Founders</p> 
-                     -->
+                    
                 <div class="founder mr-5">
                      <img src="{{asset ('storage/member_img.jpg')}}" alt=""
                     class ="w-96 h-96 object-cover">

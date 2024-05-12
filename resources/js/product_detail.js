@@ -39,11 +39,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function changeImageWithAnimation(newImageSrc) {
     var largeImage = document.getElementById("largeImage");
-    largeImage.style.opacity = 0; // Fade out the current image
-
+    largeImage.style.opacity = 0;
     setTimeout(function () {
-        largeImage.src = newImageSrc; // Change the image source
-        largeImage.style.opacity = 1; // Fade in the new image
+        largeImage.src = newImageSrc;
+        largeImage.style.opacity = 1;
         largeImage.style.transition = "0.3s ease-in-out";
-    }, 300); // Adjust the time according to your transition duration
+    }, 300);
+}
+function getSelectedColor() {
+    return document.querySelector('input[name="color"]:checked').value;
+}
+
+function getSelectedSize() {
+    return document.querySelector('input[name="size"]:checked').value;
+}
+
+const buy = document.getElementById("buynow");
+if (buy) {
+    buy.addEventListener("click", function () {
+        document.getElementById("selectedColor").value = getSelectedColor();
+        document.getElementById("selectedSize").value = getSelectedSize();
+        document.getElementById("buy").submit();
+    });
 }

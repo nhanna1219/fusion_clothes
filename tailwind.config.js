@@ -24,6 +24,11 @@ export default {
                     },
                 },
             },
+            colors: {
+                "custom-gray": "#6b7280",
+                "custom-beige": "#fef9c3",
+                "custom-brown": "#872c2c",
+            },
         },
     },
 
