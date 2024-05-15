@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
         displayProducts();
     }
     // Adding and subtract item quantity
-    const add = document.getElementById("increment-button");
-    const sub = document.getElementById("decrement-button");
-    const input = document.getElementById("quantity-input");
+    const add = document.getElementById("increment-button_buynow");
+    const sub = document.getElementById("decrement-button_buynow");
+    const input = document.getElementById("quantity-input_buynow");
 
     // const productPrice = parseFloat(
     //     document.querySelector(".productprice").textContent
@@ -32,6 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const price_total = document.getElementById("price_total");
 
     let a = 1;
+    if (input) {
+        a = input.value;
+    }
     if (add && sub) {
         add.addEventListener("click", () => {
             a++;

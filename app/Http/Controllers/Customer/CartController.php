@@ -21,7 +21,8 @@ class CartController extends Controller
         $product = Product::with(['category', 'images', 'variants.size', 'variants.color'])->findOrFail($id);
         $selectedColor = $request->query('selected_color');
         $selectedSize = $request->query('selected_size');
+        $quantity = $request->query("selected_quantity");
 
-        return view('customer.cart.buynow', compact('product', 'selectedColor', 'selectedSize'));
+        return view('customer.cart.buynow', compact('product', 'selectedColor', 'selectedSize', 'quantity'));
     }
 }

@@ -54,11 +54,37 @@ function getSelectedSize() {
     return document.querySelector('input[name="size"]:checked').value;
 }
 
+function getSelectedQuantity() {
+    return document.getElementById("quantity-input").value;
+}
+
 const buy = document.getElementById("buynow");
+const buyForm = document.getElementById("buy");
+
+function checkSizeAndColor() {
+    const color = getSelectedColor();
+    const size = getSelectedSize();
+
+    if (!color || !size) {
+        return true;
+    }
+    return false;
+}
+
 if (buy) {
     buy.addEventListener("click", function () {
-        document.getElementById("selectedColor").value = getSelectedColor();
-        document.getElementById("selectedSize").value = getSelectedSize();
-        document.getElementById("buy").submit();
+        const colortitle = document.getElementById("colortitle");
+        const sizetitle = document.getElementById("sizetitle");
+        if (colortitle && sizetitle) {
+            document.getElementById("selectedColor").value = getSelectedColor();
+            document.getElementById("selectedSize").value = getSelectedSize();
+            document.getElementById("selectedquantity").value =
+                getSelectedQuantity();
+            document.getElementById("buy").submit();
+        } else {
+            document.getElementById("selectedquantity").value =
+                getSelectedQuantity();
+            document.getElementById("buy").submit();
+        }
     });
 }
