@@ -34,6 +34,7 @@ class ProductCategory extends Model
         'modified_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
+    const UPDATED_AT = 'modified_at';
 
     public function parent(): BelongsTo
     {

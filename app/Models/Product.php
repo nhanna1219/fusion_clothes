@@ -36,6 +36,8 @@ class Product extends Model
         'modified_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'modified_at';
 
     public function category(): BelongsTo
     {

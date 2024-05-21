@@ -34,7 +34,8 @@ class Order extends Model
         'created_at' => 'timestamp',
         'modified_at' => 'timestamp',
     ];
-
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'modified_at';
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

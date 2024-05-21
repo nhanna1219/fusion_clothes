@@ -16,6 +16,8 @@ class ProductSize extends Model
      */
     protected $fillable = [
         'size_description',
+        'created_at',
+        'modified_at',
     ];
 
     /**
@@ -25,5 +27,8 @@ class ProductSize extends Model
      */
     protected $casts = [
         'id' => 'integer',
-    ];
+        'created_at' => 'timestamp',
+        'modified_at' => 'timestamp',
+    ];    
+    const UPDATED_AT = 'modified_at';
 }

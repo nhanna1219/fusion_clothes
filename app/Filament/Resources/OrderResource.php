@@ -48,7 +48,7 @@ class OrderResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('total')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable(),                    
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -64,11 +64,12 @@ class OrderResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            // ->bulkActions([
+            //     Tables\Actions\BulkActionGroup::make([
+            //         Tables\Actions\DeleteBulkAction::make(),
+            //     ]),
+            // ])
+            ;
     }
 
     public static function getRelations(): array
