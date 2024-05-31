@@ -74,76 +74,42 @@
                 </div>
 
                 <p class="pt-6 text-[30px]" id="cost_product">${{$product->price}}</p>
-                <p class="pt-3 w-[80%]">{{ $product->description }}
-                </p>
+                <p class="pt-3 w-[80%]">{{ $product->description }}</p>
 
                 @if ( !(count($colors)==0) && !is_null($colors[0]) )
                 <p class="mt-6 mb-2 text-[18px]" id="colortitle">Color:</p>
-                <ul class="w-[70%] grid  gap-2 grid-cols-10 mb-5">
+                <ul class="w-[70%] grid gap-2 grid-cols-10 mb-5">
                     @foreach ($colors as $index => $color)
-                    <li>
-                        <input id="Color_{{$color}}" type="radio" name="color" value="{{ $color }}" class="hidden peer "
-                            required @if ($loop->first) checked @endif>
-                        <label for="Color_{{$color}}"
-                            class="flex items-center space-x-3 cursor-pointer 
-                            
-                                block w-8 h-8 
-                            @switch ($color)
-                                @case ('black')
-                                    bg-black
-                                    @break
-                                @case ('white')
-                                    bg-white
-                                    @break
-                                @case ('beige')
-                                    bg-custom-beige
-                                    @break
-                                @case ('gray')
-                                    bg-custom-gray
-                                    @break
-                                @case ('brown')
-                                    bg-custom-brown
-                                    @break
-                            @endswitch
-                            rounded-full border-2 border-transparent peer-checked:border-blue-500 peer-checked:border-[3px] shadow hover:shadow-lg transition-shadow duration-300 transform peer-checked:scale-110">
-
-                        </label>
-                    </li>
+                        @php
+                            $colorClass = '';
+                            switch ($color) {
+                                case 'black':
+                                    $colorClass = 'bg-black';
+                                    break;
+                                case 'white':
+                                    $colorClass = 'bg-white border-2 border-[#eee]';
+                                    break;
+                                case 'beige':
+                                    $colorClass = 'bg-custom-beige';
+                                    break;
+                                case 'gray':
+                                    $colorClass = 'bg-custom-gray';
+                                    break;
+                                case 'brown':
+                                    $colorClass = 'bg-custom-brown';
+                                    break;
+                            }
+                        @endphp
+                        <li>
+                            <input id="Color_{{$color}}" type="radio" name="color" value="{{ $color }}" class="hidden peer"
+                                   required @if ($loop->first) checked @endif>
+                            <label for="Color_{{$color}}"
+                                   class="flex items-center space-x-3 cursor-pointer w-8 h-8 {{ $colorClass }} rounded-full border-2 border-transparent peer-checked:border-blue-600 peer-checked:border-[3px] shadow hover:shadow-lg transition-shadow duration-300 transform peer-checked:scale-110">
+                            </label>
+                        </li>
                     @endforeach
                 </ul>
-
-                <!-- <div class="flex flex-wrap">
-                    @foreach ($colors as $index => $color)
-
-                    <input id="Color_{{$color}}" type="radio" name="color" value="{{ $color }}" class="hidden peer "
-                        required>
-                    <label for="Color_{{$color}}" class="flex items-center space-x-3 cursor-pointer group">
-                        <span
-                            class="block w-8 h-8 
-                            @switch ($color)
-                                @case ('black')
-                                    bg-black
-                                    @break
-                                @case ('white')
-                                    bg-white
-                                    @break
-                                @case ('beige')
-                                    bg-custom-beige
-                                    @break
-                                @case ('gray')
-                                    bg-custom-gray
-                                    @break
-                                @case ('brown')
-                                    bg-custom-brown
-                                    @break
-                            @endswitch
-                            rounded-full border-2 border-transparent peer-checked:border-blue-500 peer-checked:border-[3px] shadow hover:shadow-lg transition-shadow duration-300 transform peer-checked:scale-110">
-                        </span>
-                    </label>
-                    @endforeach
-
-                </div>
-                @endif -->
+                @endif
 
                 @if (!(count($sizes)==0) && !is_null($sizes[0]))
                 <p class="mt-6 mb-2 text-[18px]" id="sizetitle">Size:</p>
@@ -212,33 +178,36 @@
             </div>
         </div>
 
-        <div class="flex flex-col gap-y-5 items-center px-60">
-            <div class="font-bold text-2xl">Description</div>
+        <div class="flex flex-col gap-y-5 items-center px-60 mb-12">
+            <div class="font-bold text-2xl">Product Description</div>
             <ul class="flex flex-col gap-y-4">
-                <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero voluptas perspiciatis est hic
-                    maxime, labore mollitia atque eligendi, obcaecati cum porro distinctio quam iste non, accusantium
-                    sint! Officiis, harum repellendus?</li>
-                <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Earum doloremque adipisci molestiae
-                    inventore eligendi ex nisi ea modi laboriosam veniam quia rem, ullam quasi minus voluptatem. Dolor
-                    necessitatibus quis unde!</li>
+                <li>Discover our exclusive range of high-quality clothing, designed to keep you stylish and comfortable. Each piece is crafted with meticulous attention to detail, ensuring a perfect fit and timeless appeal. Whether you're looking for casual wear, business attire, or something special for an occasion, we have you covered.</li>
+                <li>Our collection features a variety of styles, from classic to contemporary, made from premium fabrics that offer durability and comfort. With our clothing, you'll experience the perfect blend of fashion and function, making you look and feel your best.</li>
                 <ul class="flex flex-col gap-y-3">
                     <li class="flex gap-x-4">
                         <svg width="29" height="24" viewBox="0 0 29 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="17" cy="12" r="12" fill="#0A0A0A" />
                             <circle cx="10" cy="12" r="8.75" fill="#D9D9D9" stroke="white" stroke-width="2.5" />
                         </svg>
-                        <div>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sed, accusantium.</div>
+                        <div>Premium Quality: Made from high-quality fabrics to ensure durability and comfort.</div>
                     </li>
                     <li class="flex gap-x-4">
                         <svg width="29" height="24" viewBox="0 0 29 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="17" cy="12" r="12" fill="#0A0A0A" />
                             <circle cx="10" cy="12" r="8.75" fill="#D9D9D9" stroke="white" stroke-width="2.5" />
                         </svg>
-
-                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, tempora.</div>
+                        <div>Timeless Style: Our designs combine classic and contemporary elements for a versatile wardrobe.</div>
+                    </li>
+                    <li class="flex gap-x-4">
+                        <svg width="29" height="24" viewBox="0 0 29 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="17" cy="12" r="12" fill="#0A0A0A" />
+                            <circle cx="10" cy="12" r="8.75" fill="#D9D9D9" stroke="white" stroke-width="2.5" />
+                        </svg>
+                        <div>Perfect Fit: Carefully crafted to provide a comfortable and flattering fit for all body types.</div>
                     </li>
                 </ul>
             </ul>
         </div>
+
     </div>
 </x-app-layout>
