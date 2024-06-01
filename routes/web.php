@@ -49,7 +49,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/buynow/{id}', [CartController::class, 'show'])->name('customer.cart.buynow');
 
     // Checkout
-    Route::get('/momo_payment', [CheckoutController::class, 'momopayment']);
+    Route::get('/momo_payment', [CheckoutController::class, 'momoPayment']);
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('customer.checkout.index');
     Route::get('/checkout/confirmation', [CheckoutController::class, 'confirmation'])->name('customer.checkout.confirmation');
     Route::get('/checkout/thank-you', [CheckoutController::class, 'friendlyThanks'])->name('customer.checkout.friendlyThanks');

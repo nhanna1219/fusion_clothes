@@ -35,9 +35,12 @@ class OrderDetail extends Model
         'modified_at' => 'timestamp',
     ];
 
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'modified_at';
+
     public function order(): BelongsTo
     {
-        return $this->belongsTo(OrderDetail::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function product(): BelongsTo

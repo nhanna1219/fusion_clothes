@@ -20,8 +20,6 @@ class ProductVariant extends Model
         'size_id',
         'color_id',
         'quantity',
-        'created_at',
-        'modified_at',
     ];
 
     /**
@@ -34,10 +32,7 @@ class ProductVariant extends Model
         'product_id' => 'integer',
         'size_id' => 'integer',
         'color_id' => 'integer',
-        'created_at' => 'timestamp',
-        'modified_at' => 'timestamp',
     ];
-    const UPDATED_AT = 'modified_at';
 
     public function product(): BelongsTo
     {

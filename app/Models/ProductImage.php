@@ -31,7 +31,9 @@ class ProductImage extends Model
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
     ];
-
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'modified_at';
+    
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
