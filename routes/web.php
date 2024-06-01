@@ -1,10 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\CustomerManagementController;
-use App\Http\Controllers\Admin\OrderManagementController;
-use App\Http\Controllers\Admin\ProductManagementController;
-use App\Http\Controllers\Admin\StatisticsReportsManagementController;
-use App\Http\Controllers\Admin\UserManagementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\HomeController;
 use App\Http\Controllers\Customer\AboutUsController;
@@ -24,7 +19,6 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->name('customer
 
 // Cart
 Route::get('/cart', CartController::class);
-
 
 // Authenticated Routes
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {

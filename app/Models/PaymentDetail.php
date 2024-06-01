@@ -18,6 +18,7 @@ class PaymentDetail extends Model
     protected $fillable = [
         'order_id',
         'amount',
+        'payment_method',
         'status',
         'modified_at',
     ];
