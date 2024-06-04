@@ -33,6 +33,8 @@ class ProductVariant extends Model
         'size_id' => 'integer',
         'color_id' => 'integer',
     ];
+    
+    public $timestamps = false;
 
     public function product(): BelongsTo
     {

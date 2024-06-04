@@ -15,6 +15,8 @@ class PaymentDetail extends Model
      *
      * @var array
      */
+    public $timestamps = false;
+
     protected $fillable = [
         'order_id',
         'amount',

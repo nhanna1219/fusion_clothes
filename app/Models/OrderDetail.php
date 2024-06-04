@@ -17,7 +17,7 @@ class OrderDetail extends Model
      */
     protected $fillable = [
         'order_id',
-        'product_id',
+        'product_variant_id',
         'quantity',
         'modified_at',
     ];
@@ -30,7 +30,7 @@ class OrderDetail extends Model
     protected $casts = [
         'id' => 'integer',
         'order_id' => 'integer',
-        'product_id' => 'integer',
+        'product_variant_id' => 'integer',
         'created_at' => 'timestamp',
         'modified_at' => 'timestamp',
     ];
@@ -43,7 +43,7 @@ class OrderDetail extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function product(): BelongsTo
+    public function productVariant(): BelongsTo
     {
         return $this->belongsTo(ProductVariant::class);
     }

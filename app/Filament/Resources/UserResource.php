@@ -32,22 +32,15 @@ class UserResource extends Resource
                             ->email()
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('password')
-                            ->password()
-                            ->required()
-                            ->maxLength(255),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255)
                             ->default(null),
                         Forms\Components\Select::make('role_id')
-                            ->options([
-                                'Admin' => '1',
-                                'User' => '2',
-                            ])
+                            ->relationship('role', 'role_name')
                             ->native(false)
                             ->required()
-                            ->default(2),
+                            ->label(fn ($livewire) => $livewire instanceof Pages\EditUser ? 'Role' : 'role_id')
                     ])->columns(2),    
                 Forms\Components\Section::make('Information')
                     ->schema([
@@ -60,7 +53,7 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('phone')
                             ->tel()
                             ->maxLength(255)
-                            ->default(null)->columnSpanFull(),
+                            ->default(null),
                     ])->columns(2),
             ]);
     }
@@ -79,8 +72,7 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('role_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('role.role_name')
                     ->sortable(),
             ])
             ->filters([
@@ -89,6 +81,7 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -23,10 +23,10 @@ class PaymentDetailFactory extends Factory
     {
         return [
             'order_id' => Order::factory(),
-            'amount' => $this->faker->randomFloat(2, 0, 99999999.99),
-            'status' => $this->faker->regexify('[A-Za-z0-9]{50}'),
-            'created_at' => $this->faker->dateTime(),
-            'modified_at' => $this->faker->dateTime(),
+            'amount' => $this->faker->randomFloat(2, 0, 1000),
+            'status' => Str::random(['Momo', 'COD']),
+            'created_at' => now(),
+            'modified_at' => now(),
         ];
     }
 }

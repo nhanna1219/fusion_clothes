@@ -3,15 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
-use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
+use App\Models\PaymentDetail;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use Filament\Forms;
+use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Log;
 
 class OrderResource extends Resource
 {
@@ -19,21 +24,198 @@ class OrderResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-queue-list';
 
+    protected static array $status = [
+        'Pending' => 'Pending',
+        'Processing' => 'Processing',
+        'On Delivery' => 'On Delivery',
+        'Cancelled' => 'Cancelled',
+        'Shipped' => 'Shipped',
+    ];
+
+    public static function query(): Builder
+    {
+        return parent::query()
+            ->with(['orderDetail.productVariant.product', 'orderDetail.productVariant.size', 'orderDetail.productVariant.color', 'paymentDetail']);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->required()
-                    ->maxLength(20),
-                Forms\Components\TextInput::make('total')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\DateTimePicker::make('modified_at')
-                    ->required(),
+                Section::make('Order Info')
+                    ->schema([
+                        Forms\Components\Select::make('user_id')
+                            ->relationship('user', 'name')
+                            ->native(false)
+                            ->required()
+                            ->columnSpan(1)
+                            ->disabled(fn(Get $get) => !self::isModifiableStatus($get('status'))),
+                        Forms\Components\TextInput::make('total')
+                            ->readOnly()
+                            ->columnSpan(1)
+                            ->prefix('$')
+                            ->afterStateHydrated(function (Get $get, Set $set) {
+                                self::updateTotals($get, $set);
+                            })
+                            ->disabled(fn(Get $get) => !self::isModifiableStatus($get('status')))
+                            ->columnSpan(1),
+                        Forms\Components\Hidden::make('payment_status'),
+                        Forms\Components\Hidden::make('payment_id'),
+                        Forms\Components\Select::make('payment_method')
+                            ->label('Payment Method')
+                            ->options([
+                                'COD' => 'COD',
+                                'Momo' => 'Momo',
+                            ])
+                            ->default('COD')
+                            ->native(false)
+                            ->required()
+                            ->columnSpan(1)
+                            ->afterStateHydrated(function (Get $get, Set $set) {
+                                $order = Order::find($get('id'));
+                                $payment = PaymentDetail::where('order_id', $order->id)->first();
+                                if ($payment) {
+                                    $set('payment_id', $payment->id);
+                                    $set('payment_method', $payment->payment_method);
+                                }
+                            })
+                            ->disabled(fn(Get $get) => !self::isModifiableStatus($get('status'))),
+                        Forms\Components\ToggleButtons::make('status')
+                            ->options(self::$status)
+                            ->disableOptionWhen(function ($value, $state) {
+                                return ($state === 'Shipped' && in_array($value, ['Pending', 'Processing', 'On Delivery', 'Cancelled'])) ||
+                                    ($state === 'Cancelled' && in_array($value, ['Pending', 'Processing', 'On Delivery', 'Shipped']));
+                            })
+                            ->colors([
+                                'Pending' => 'warning',
+                                'Processing' => 'primary',
+                                'On Delivery' => 'info',
+                                'Cancelled' => 'danger',
+                                'Shipped' => 'success',
+                            ])
+                            ->icons([
+                                'Pending' => 'heroicon-o-pencil',
+                                'Processing' => 'heroicon-o-clock',
+                                'On Delivery' => 'heroicon-o-rocket-launch',
+                                'Cancelled' => 'heroicon-o-x-circle',
+                                'Shipped' => 'heroicon-o-check-circle',
+                            ])
+                            ->inline()
+                            ->required()
+                            ->default('Pending')
+                            ->columnSpanFull()
+                            ->afterStateUpdated(function (Get $get, Set $set) {
+                                $state = $get('status');
+                                $method = $get('payment_method');
+                                if ((self::isModifiableStatus($state)) || (($state == 'Cancelled') && ($method == 'COD'))) {
+                                    $set('payment_status', 'Unpaid');
+                                } else if (($state == 'Cancelled') && ($method == 'Momo')) {
+                                    $set('payment_status', 'Refunded');
+                                } else if (($state == 'Shipped') && ($method == 'COD')){
+                                    $set('payment_status', 'Paid');
+                                }
+                            }),
+                    ])->columns(3),
+                Forms\Components\Repeater::make('orderDetail')
+                    ->relationship('orderDetail')
+                    ->afterStateHydrated(function (Get $get, Set $set) {
+                        self::updateTotals($get, $set);
+                    })
+                    ->schema([
+                        Forms\Components\FieldSet::make()
+                            ->label('Product Details')
+                            ->columns(2)
+                            ->schema([
+                                Forms\Components\Select::make('product_id')
+                                    ->label('Name')
+                                    ->native(false)
+                                    ->options(Product::all()->pluck('name', 'id')->toArray())
+                                    ->reactive()
+                                    ->required()
+                                    ->afterStateUpdated(function (callable $get, callable $set, $state) {
+                                        $product = Product::find($state);
+                                        if ($product) {
+                                            $set('product_price', $product->price);
+                                            $set('size_id', null);
+                                            $set('color_id', null);
+                                        }
+                                    }),
+                                Forms\Components\Hidden::make('product_variant_id')
+                                    ->afterStateHydrated(function (Get $get, Set $set) {
+                                        $productVariantId = $get('product_variant_id');
+                                        if ($productVariantId) {
+                                            $productVariant = ProductVariant::find($productVariantId);
+                                            if ($productVariant) {
+                                                $set('product_id', $productVariant->product_id);
+                                                $set('size_id', $productVariant->size_id);
+                                                $set('color_id', $productVariant->color_id);
+                                                $set('product_price', $productVariant->product->price);
+                                            }
+                                        }
+                                    }),
+                                Forms\Components\TextInput::make('product_price')
+                                    ->label('Price')
+                                    ->prefix('$')
+                                    ->readOnly(),
+                                Forms\Components\Select::make('size_id')
+                                    ->label('Size')
+                                    ->native(false)
+                                    ->options(function ($get) {
+                                        $productId = $get('product_id');
+                                        if (!$productId) {
+                                            return [];
+                                        }
+                                        return ProductVariant::where('product_id', $productId)
+                                            ->get()
+                                            ->pluck('size.size_description', 'size_id');
+                                    })
+                                    ->reactive()
+                                    ->required()
+                                    ->afterStateUpdated(function (callable $get, callable $set, $state) {
+                                        $productVariants = ProductVariant::where('product_id', $get('product_id'))->where('size_id', $state)->get();
+                                        $colors = $productVariants->pluck('color.color_name', 'color_id');
+                                        $set('colors', $colors);
+                                        $set('color_id', null);
+                                    }),
+                                Forms\Components\Select::make('color_id')
+                                    ->label('Color')
+                                    ->native(false)
+                                    ->options(function ($get) {
+                                        return $get('colors') ?: [];
+                                    })
+                                    ->reactive()
+                                    ->required()
+                                    ->afterStateUpdated(function (callable $get, callable $set) {
+                                        $productVariant = ProductVariant::where('product_id', $get('product_id'))
+                                            ->where('size_id', $get('size_id'))
+                                            ->where('color_id', $get('color_id'))
+                                            ->first();
+                                        $set('product_variant_id', $productVariant ? $productVariant->id : null);
+                                    }),
+                            ]),
+                        Forms\Components\TextInput::make('quantity')
+                            ->label('Quantity')
+                            ->required()
+                            ->numeric()
+                            ->default(1)
+                            ->columnSpanFull(),
+                    ])
+                    ->label('Order Details')
+                    ->addActionLabel('Add order details')
+                    ->live()
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        self::updateTotals($get, $set);
+                    })
+                    ->disabled(fn(Get $get) => !self::isModifiableStatus($get('status')))
+                    ->deleteAction(
+                        fn(Forms\Components\Actions\Action $action) => $action->after(fn(Get $get, Set $set) => self::updateTotals($get, $set)),
+                    )
+                    ->addAction(function (Get $get, Set $set) {
+                        self::updateTotals($get, $set);
+                    })
+                    ->reorderable(false)
+                    ->columns(3)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -43,40 +225,45 @@ class OrderResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->badge()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('total')
                     ->numeric()
-                    ->sortable(),                    
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('paymentDetail.payment_method')
+                    ->label('Payment Method')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('paymentDetail.status')
+                    ->label('Payment Status')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('modified_at')
-                    ->dateTime()
-                    ->sortable(),
             ])
+            ->striped()
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->options(self::$status)
+                    ->label('Status')
+                    ->default('')
+                    ->native(false)
+                    ->preload()
+                    ->multiple(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
-            // ->bulkActions([
-            //     Tables\Actions\BulkActionGroup::make([
-            //         Tables\Actions\DeleteBulkAction::make(),
-            //     ]),
-            // ])
-            ;
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 
     public static function getPages(): array
@@ -84,8 +271,25 @@ class OrderResource extends Resource
         return [
             'index' => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
-            // 'view' => Pages\ViewOrder::route('/{record}'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
+    }
+
+    public static function updateTotals(Get $get, Set $set): void
+    {
+        $selectedProducts = collect($get('orderDetail'))->filter(fn($item) => !empty($item['product_variant_id']) && !empty($item['quantity']));
+
+        $prices = ProductVariant::find($selectedProducts->pluck('product_variant_id'))->pluck('product.price', 'id');
+
+        $subtotal = $selectedProducts->reduce(function ($subtotal, $product) use ($prices) {
+            return $subtotal + ($prices[$product['product_variant_id']] * $product['quantity']);
+        }, 0);
+
+        $set('total', number_format($subtotal, 2, '.', ''));
+    }
+
+    private static function isModifiableStatus($status)
+    {
+        return !in_array($status, ['Cancelled', 'Shipped']);
     }
 }

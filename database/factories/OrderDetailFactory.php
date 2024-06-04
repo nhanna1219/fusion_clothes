@@ -24,9 +24,9 @@ class OrderDetailFactory extends Factory
         return [
             'order_id' => OrderDetail::factory(),
             'product_id' => ProductVariant::factory(),
-            'quantity' => $this->faker->numberBetween(-10000, 10000),
-            'created_at' => $this->faker->dateTime(),
-            'modified_at' => $this->faker->dateTime(),
+            'quantity' => $this->faker->numberBetween(0, 10000),
+            'created_at' => now(),
+            'modified_at' => now(),
         ];
     }
 }
