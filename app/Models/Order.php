@@ -8,6 +8,7 @@ use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
@@ -40,6 +41,18 @@ class Order extends Model
     ];
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'modified_at';
+
+    use SoftDeletes;
+    
+    public $timestamps = false;
+    protected static function booted()
+    {
+        static::deleting(function ($order) {
+            $order->orderDetail()->delete();
+            $order->paymentDetail()->delete();
+        });
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -54,4 +67,6 @@ class Order extends Model
     {
         return $this->hasOne(PaymentDetail::class);
     }
+
+    
 }

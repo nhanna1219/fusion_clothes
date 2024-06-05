@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -35,12 +36,14 @@ class ProductCategoryResource extends Resource
                 Forms\Components\Textarea::make('desc')
                     ->columnSpanFull(),
                 Forms\Components\Select::make('parent_id')
-                ->options(
-                    ProductCategory::whereIn('parent_id', [1, 2])
-                        ->pluck('name', 'id')
-                        ->toArray()
-                )
-                ->default(null),
+                    ->label('Parent')
+                    ->options(
+                        ProductCategory::where('parent_id', NULL)
+                            ->pluck('name', 'id')
+                            ->toArray()
+                    )
+                    ->native(false)
+                    ->default(null),
             ]);
     }
 
@@ -72,11 +75,50 @@ class ProductCategoryResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->before(function (Tables\Actions\DeleteAction $action, $record) {
+                        if ($record->children()->exists()) {
+                            Notification::make()
+                                ->title('Error')
+                                ->body('Cannot delete a category that has child categories')
+                                ->danger()
+                                ->send();
+
+                            $action->cancel();
+                        }
+                    })
+                    ->after(function (Tables\Actions\DeleteAction $action, $record) {
+                        if ($record->products()->exists()) {
+                            $record->products()->update(['category_id' => null]);
+                        }
+                    }),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->before(function (Tables\Actions\DeleteBulkAction $action, $records) {
+                            foreach ($records as $record) {
+                                if ($record->children()->exists()) {
+                                    Notification::make()
+                                        ->title('Cannot Delete Categories')
+                                        ->body('One or more selected categories have child categories and cannot be deleted')
+                                        ->danger()
+                                        ->send();
+
+                                    $action->cancel();
+                                    break;
+                                }
+                            }
+                        })
+                        ->after(function (Tables\Actions\DeleteBulkAction $action, $records) {
+                            foreach ($records as $record) {
+                                if ($record->products()->exists()) {
+                                    $record->products()->update(['category_id' => null]);
+                                }
+                            }
+                        }),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

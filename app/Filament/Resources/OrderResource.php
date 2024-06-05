@@ -73,10 +73,12 @@ class OrderResource extends Resource
                             ->columnSpan(1)
                             ->afterStateHydrated(function (Get $get, Set $set) {
                                 $order = Order::find($get('id'));
-                                $payment = PaymentDetail::where('order_id', $order->id)->first();
-                                if ($payment) {
-                                    $set('payment_id', $payment->id);
-                                    $set('payment_method', $payment->payment_method);
+                                if ($order) {
+                                    $payment = PaymentDetail::where('order_id', $order->id)->first();
+                                    if ($payment) {
+                                        $set('payment_id', $payment->id);
+                                        $set('payment_method', $payment->payment_method);
+                                    }
                                 }
                             })
                             ->disabled(fn(Get $get) => !self::isModifiableStatus($get('status'))),
@@ -107,12 +109,19 @@ class OrderResource extends Resource
                             ->afterStateUpdated(function (Get $get, Set $set) {
                                 $state = $get('status');
                                 $method = $get('payment_method');
-                                if ((self::isModifiableStatus($state)) || (($state == 'Cancelled') && ($method == 'COD'))) {
-                                    $set('payment_status', 'Unpaid');
-                                } else if (($state == 'Cancelled') && ($method == 'Momo')) {
-                                    $set('payment_status', 'Refunded');
-                                } else if (($state == 'Shipped') && ($method == 'COD')){
-                                    $set('payment_status', 'Paid');
+
+                                if ($method == 'Momo') {
+                                    if ($state == 'Cancelled') {
+                                        $set('payment_status', 'Refunded');
+                                    } else {
+                                        $set('payment_status', 'Paid');
+                                    }
+                                } else {
+                                    if (self::isModifiableStatus($state) || ($state == 'Cancelled')) {
+                                        $set('payment_status', 'Unpaid');
+                                    } else {
+                                        $set('payment_status', 'Paid');
+                                    }
                                 }
                             }),
                     ])->columns(3),
@@ -251,8 +260,38 @@ class OrderResource extends Resource
                     ->label('Status')
                     ->default('')
                     ->native(false)
-                    ->preload()
                     ->multiple(),
+                Tables\Filters\SelectFilter::make('payment_method')
+                    ->options([
+                        'COD' => 'COD',
+                        'Momo' => 'Momo',
+                    ])
+                    ->label('Payment Method')
+                    ->native(false)
+                    ->multiple()
+                    ->query(function ($query, array $data) {
+                        if (!empty($data['values'])) {
+                            $query->whereHas('paymentDetail', function ($query) use ($data) {
+                                $query->whereIn('payment_method', $data['values']);
+                            });
+                        }
+                    }),
+                Tables\Filters\SelectFilter::make('payment_status')
+                    ->options([
+                        'Paid' => 'Paid',
+                        'Unpaid' => 'Unpaid',
+                        'Refunded' => 'Refunded',
+                    ])
+                    ->label('Payment Status')
+                    ->native(false)
+                    ->multiple()
+                    ->query(function ($query, array $data) {
+                        if (!empty($data['values'])) {
+                            $query->whereHas('paymentDetail', function ($query) use ($data) {
+                                $query->whereIn('status', $data['values']);
+                            });
+                        }
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

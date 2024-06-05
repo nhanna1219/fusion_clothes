@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -27,7 +28,17 @@ class ProductResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name')
+                    ->label('Category')
+                    ->options(function () {
+                        return ProductCategory::with('parent')
+                            ->get()
+                            ->mapWithKeys(function ($category) {
+                                $label = $category->parent ? "{$category->name} [{$category->parent->name}]" : $category->name;
+                                return [$category->id => $label];
+                            })
+                            ->toArray();
+                    })
+                    ->native(false)
                     ->required(),
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
@@ -46,7 +57,8 @@ class ProductResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category.name')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('price')
                     ->money()
                     ->sortable(),
@@ -64,7 +76,20 @@ class ProductResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('category_id')
+                    ->options(function () {
+                        return ProductCategory::with('parent')
+                            ->get()
+                            ->mapWithKeys(function ($category) {
+                                $label = $category->parent ? "{$category->name} [{$category->parent->name}]" : $category->name;
+                                return [$category->id => $label];
+                            })
+                            ->toArray();
+                    })
+                    ->label('Category')
+                    ->native(false)
+                    ->preload()
+                    ->multiple()
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
