@@ -3,30 +3,41 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\OrderDetail;
+use App\Models\PaymentDetail;
 
 class OrderFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Order::class;
 
-    /**
-     * Define the model's default state.
-     */
     public function definition(): array
     {
         return [
             'user_id' => User::factory(),
-            'status' => $this->faker->regexify('[A-Za-z0-9]{20}'),
-            'total' => $this->faker->randomFloat(2, 0, 99999999.99),
-            'created_at' => $this->faker->dateTime(),
-            'modified_at' => $this->faker->dateTime(),
+            'status' => $this->faker->randomElement(['Pending', 'Processing', 'On Delivery', 'Cancelled', 'Shipped']),
+            'total' => 0,
+            'created_at' => now(),
+            'modified_at' => now(),
         ];
+    }
+
+    public function configure()
+    {
+        // return $this->afterCreating(function (Order $order) {
+        //     $orderDetails = OrderDetail::factory()->count(3)->create(['order_id' => $order->id]);
+
+        //     $total = $orderDetails->sum(function ($detail) {
+        //         return $detail->quantity * $detail->price;
+        //     });
+
+        //     $order->update(['total' => $total]);
+
+        //     PaymentDetail::factory()->create(['order_id' => $order->id]);
+
+        //     unset($orderDetails);
+        //     unset($total);
+        // });
     }
 }

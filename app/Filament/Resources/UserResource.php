@@ -20,7 +20,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
@@ -32,22 +32,15 @@ class UserResource extends Resource
                             ->email()
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('password')
-                            ->password()
-                            ->required()
-                            ->maxLength(255),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255)
                             ->default(null),
                         Forms\Components\Select::make('role_id')
-                            ->options([
-                                'Admin' => '1',
-                                'User' => '2',
-                            ])
+                            ->relationship('role', 'role_name')
                             ->native(false)
                             ->required()
-                            ->default(2),
+                            ->label('Role')
                     ])->columns(2),    
                 Forms\Components\Section::make('Information')
                     ->schema([
@@ -60,7 +53,7 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('phone')
                             ->tel()
                             ->maxLength(255)
-                            ->default(null)->columnSpanFull(),
+                            ->default(null),
                     ])->columns(2),
             ]);
     }
@@ -79,8 +72,7 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('role_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('role.role_name')
                     ->sortable(),
             ])
             ->filters([
@@ -89,6 +81,7 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -97,6 +90,16 @@ class UserResource extends Resource
             ]);
     }
     
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'success';
+    }
+
     public static function infoList(Infolist $infoList): Infolist
     {
         return $infoList

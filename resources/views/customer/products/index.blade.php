@@ -1,6 +1,5 @@
 <x-app-layout>
     <x-slot name="header"></x-slot>
-
     <div>
         <div class="bg-[#f5f5f5] w-full h-[150px] flex flex-col justify-center items-center relative z-10 overflow-hidden">
             <img src="{{asset ('storage/background_pattern.png')}}" alt="" class="absolute w-[20%] min-w-[150px] max-w-[200px] bottom-[-10%] left-[10%] z-0">
@@ -25,9 +24,9 @@
                                     value="{{$parentCategory->name}}" 
                                     onchange="filterProductsByCategory(this)" 
                                     class="focus:ring-0 focus:outline-none bg-gray-50 rounded-[4px] cursor-pointer text-black"
-                                    @if (in_array($parentCategory->name, explode(',', $q_categories))) 
+                                    @if (in_array(strtolower($parentCategory->name), array_map('strtolower', explode(',', $q_categories))))
                                         checked="checked"
-                                    @endif>
+                                    @endif
                                 <label for="{{$parentCategory->name}}-filtered" class="select-none">{{$parentCategory->name}}</label>
                             </div>
                         @endforeach
@@ -39,9 +38,9 @@
                                     value="{{$childCategory->name}}" 
                                     onchange="filterProductsByCategory(this)" 
                                     class="focus:ring-0 focus:outline-none bg-gray-50 rounded-[4px] cursor-pointer text-black"
-                                    @if (in_array($childCategory->name, explode(',', $q_filters))) 
+                                    @if (in_array(strtolower($childCategory->name), array_map('strtolower', explode(',', $q_filters))))
                                         checked="checked"
-                                    @endif>
+                                    @endif
                                 <label for="{{$childCategory->name}}-filtered" class="select-none">{{$childCategory->name}}</label>
                             </div>
                         @endforeach
@@ -88,6 +87,11 @@
                         @if (!empty($q_filters))
                             @foreach (explode(',', $q_filters) as $filter)
                                 <x-filter-item name="{{ $filter }}"/>
+                            @endforeach
+                        @endif
+                        @if (!empty($query))
+                            @foreach (explode(',', $query) as $q)
+                                <x-filter-item name="{{ $q }}"/>
                             @endforeach
                         @endif
                         <div class="underline cursor-pointer" id="clear-filter" onclick="clearAllFilters()">Clear All</div>
