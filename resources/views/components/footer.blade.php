@@ -45,6 +45,6 @@
         <hr class="text-white mt-10"/>
     </div>
     <div class="text-center mt-6">
-        © 2023 by Fusionclothing
+        © 2024 by Fusionclothing
     </div>
 </footer>

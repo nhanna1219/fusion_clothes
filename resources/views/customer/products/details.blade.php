@@ -4,9 +4,9 @@
     <div>
         <div
             class="bg-[#f5f5f5] w-full h-[150px] flex flex-col justify-center items-center relative z-10 overflow-hidden">
-            <img src="{{asset ('storage/background_pattern.png')}}" alt=""
+            <img src="{{ asset('storage/background_pattern.png') }}" alt=""
                 class="absolute w-[20%] min-w-[150px] max-w-[200px] bottom-[-10%] left-[10%] z-0">
-            <img src="{{asset ('storage/background_pattern.png')}}" alt=""
+            <img src="{{ asset('storage/background_pattern.png') }}" alt=""
                 class="absolute w-[20%] min-w-[150px] max-w-[200px] top-[-10%] right-[10%] z-0">
             <div class="flex flex-col gap-y-3 justify-center items-center">
                 <div class="font-bold text-[28px]">Product Details</div>
@@ -20,20 +20,20 @@
         <div class="mt-16 ml-24 mr-24 flex  mb-16">
             <div class="left">
                 <div class="big-img">
-                    <img id="largeImage" src="{{asset ($product->images->first()->image_path) }}" alt="">
+                    <img id="largeImage" src="{{ asset($product->images->first()->image_path) }}" alt="">
                 </div>
                 <div class="images">
                     <div class="small-img">
-                        <img src="{{asset ($product->images->first()->image_path)}}" alt="" class="thumbnail">
+                        <img src="{{ asset($product->images->first()->image_path) }}" alt="" class="thumbnail">
                     </div>
                     <div class="small-img">
-                        <img src="{{asset ($product->images[1]->image_path)}}" alt="" class="thumbnail">
+                        <img src="{{ asset($product->images[1]->image_path) }}" alt="" class="thumbnail">
                     </div>
                     <div class="small-img">
-                        <img src="{{asset ($product->images[2]->image_path)}}" alt="" class="thumbnail ">
+                        <img src="{{ asset($product->images[2]->image_path) }}" alt="" class="thumbnail ">
                     </div>
                     <div class="small-img">
-                        <img src="{{asset ($product->images[3]->image_path)}}" alt="" class="thumbnail">
+                        <img src="{{ asset($product->images[3]->image_path) }}" alt="" class="thumbnail">
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
 
             <div class="w-[60%]">
                 <p class="pt-7 text-[#a79f9f] text-[20px]">{{ $product->category->name }}</p>
-                <p class="pt-2 pb-3 text-[25px]">{{$product -> name}}</p>
+                <p class="pt-2 pb-3 text-[25px]">{{ $product->name }}</p>
 
                 <!-- RAting star -->
                 <div class="flex items-center pb-3">
@@ -73,61 +73,63 @@
                     <p class="pl-4 text-[18px]">4 / 5 (245 Reviews)</p>
                 </div>
 
-                <p class="pt-6 text-[30px]" id="cost_product">${{$product->price}}</p>
+                <p class="pt-6 text-[30px]" id="cost_product">${{ $product->price }}</p>
                 <p class="pt-3 w-[80%]">{{ $product->description }}</p>
 
-                @if ( !(count($colors)==0) && !is_null($colors[0]) )
-                <p class="mt-6 mb-2 text-[18px]" id="colortitle">Color:</p>
-                <ul class="w-[70%] grid gap-2 grid-cols-10 mb-5">
-                    @foreach ($colors as $index => $color)
-                        @php
-                            $colorClass = '';
-                            switch ($color) {
-                                case 'black':
-                                    $colorClass = 'bg-black';
-                                    break;
-                                case 'white':
-                                    $colorClass = 'bg-white border-2 border-[#eee]';
-                                    break;
-                                case 'beige':
-                                    $colorClass = 'bg-custom-beige';
-                                    break;
-                                case 'gray':
-                                    $colorClass = 'bg-custom-gray';
-                                    break;
-                                case 'brown':
-                                    $colorClass = 'bg-custom-brown';
-                                    break;
-                            }
-                        @endphp
-                        <li>
-                            <input id="Color_{{$color}}" type="radio" name="color" value="{{ $color }}" class="hidden peer"
-                                   required @if ($loop->first) checked @endif>
-                            <label for="Color_{{$color}}"
-                                   class="flex items-center space-x-3 cursor-pointer w-8 h-8 {{ $colorClass }} rounded-full border-2 border-transparent peer-checked:border-blue-600 peer-checked:border-[3px] shadow hover:shadow-lg transition-shadow duration-300 transform peer-checked:scale-110">
-                            </label>
-                        </li>
-                    @endforeach
-                </ul>
+                @if (!(count($colors) == 0) && !is_null($colors[0]))
+                    <p class="mt-6 mb-2 text-[18px]" id="colortitle">Color:</p>
+                    <ul class="w-[70%] grid gap-2 grid-cols-10 mb-5">
+                        @foreach ($colors as $index => $color)
+                            @php
+                                $colorClass = '';
+                                switch ($color['name']) {
+                                    case 'black':
+                                        $colorClass = 'bg-black';
+                                        break;
+                                    case 'white':
+                                        $colorClass = 'bg-white border-2 border-[#eee]';
+                                        break;
+                                    case 'beige':
+                                        $colorClass = 'bg-custom-beige';
+                                        break;
+                                    case 'gray':
+                                        $colorClass = 'bg-custom-gray';
+                                        break;
+                                    case 'brown':
+                                        $colorClass = 'bg-custom-brown';
+                                        break;
+                                }
+                            @endphp
+                            <li>
+                                <input id="Color_{{ $color['id'] }}" type="radio" name="color"
+                                    value="{{ $color['id'] }}" class="hidden peer" required
+                                    @if ($loop->first) checked @endif>
+                                <label for="Color_{{ $color['id'] }}"
+                                    class="flex items-center space-x-3 cursor-pointer w-8 h-8 {{ $colorClass }} rounded-full border-2 border-transparent peer-checked:border-blue-600 peer-checked:border-[3px] shadow hover:shadow-lg transition-shadow duration-300 transform peer-checked:scale-110">
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
                 @endif
 
-                @if (!(count($sizes)==0) && !is_null($sizes[0]))
-                <p class="mt-6 mb-2 text-[18px]" id="sizetitle">Size:</p>
-                <ul class="w-[70%] grid  gap-2 grid-cols-6 mb-5">
-                    @foreach ($sizes as $size)
-                    <li>
-                        <input type="radio" id="Size_{{ $size }}" name="size" value="{{$size}}" class="hidden peer"
-                            required @if ($loop->first) checked @endif />
-                        <label for="Size_{{ $size }}"
-                            class="inline-flex justify-center items-center  w-full p-2 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:text-white    peer-checked:bg-black peer-hover:text-white peer-hover:bg-black ">
-                            <div class="flex justify-center items-center">
-                                <span class="text-lg font-semibold">{{ $size }}</span>
-                            </div>
-                        </label>
-                    </li>
-                    @endforeach
+                @if (!(count($sizes) == 0) && !is_null($sizes[0]))
+                    <p class="mt-6 mb-2 text-[18px]" id="sizetitle">Size:</p>
+                    <ul class="w-[70%] grid  gap-2 grid-cols-6 mb-5">
+                        @foreach ($sizes as $size)
+                            <li>
+                                <input type="radio" id="Size_{{ $size['id'] }}" name="size"
+                                    value="{{ $size['id'] }}" class="hidden peer" required
+                                    @if ($loop->first) checked @endif />
+                                <label for="Size_{{ $size['id'] }}"
+                                    class="inline-flex justify-center items-center  w-full p-2 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:text-white    peer-checked:bg-black peer-hover:text-white peer-hover:bg-black ">
+                                    <div class="flex justify-center items-center">
+                                        <span class="text-lg font-semibold">{{ $size['description'] }}</span>
+                                    </div>
+                                </label>
+                            </li>
+                        @endforeach
 
-                </ul>
+                    </ul>
                 @endif
 
 
@@ -143,8 +145,8 @@
                             </svg>
                         </button>
                         <input type="text" id="quantity-input"
-                            class="border-x-0 border-gray-300 h-11 text-center text-lg block w-full py-2.5 " value="1"
-                            required disabled />
+                            class="border-x-0 border-gray-300 h-11 text-center text-lg block w-full py-2.5 "
+                            value="1" required disabled />
                         <button type="button" id="increment-button"
                             class="hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
                             <svg class="w-4 h-4 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -155,17 +157,13 @@
                         </button>
                     </div>
 
-                    <button type="button" id="add_to_cart"
+                    <button type="button" id="add-to-cart-btn"
                         class="w-1/5 mr-6 text-black bg-white h-14 text-[17px] rounded-md hover:bg-black hover:text-white border-black border-2 ">Add
-                        to cart</button>
+                        to cart
+                    </button>
 
-                    <form class="w-1/5 mr-6 " id="buy" action="{{ route('customer.cart.buynow', $product->id)}}">
-                        <div class="flex justify-center">
-
-                            <input type="hidden" name="selected_color" id="selectedColor" value="">
-                            <input type="hidden" name="selected_size" id="selectedSize" value="">
-                            <input type="hidden" name="selected_quantity" id="selectedquantity" value="">
-                            <button type="submit" id="buynow"
+                        <div class="flex justify-center w-1/5 mr-6">
+                            <button type="submit" id="buy-now-btn"
                                 class="w-full text-black bg-white h-14 text-[17px] rounded-md hover:bg-black hover:text-white border-black border-2">Buy
                                 Now</button>
                         </div>
@@ -178,32 +176,46 @@
             </div>
         </div>
 
+        {{-- Product Description --}}
         <div class="flex flex-col gap-y-5 items-center px-60 mb-12">
             <div class="font-bold text-2xl">Product Description</div>
             <ul class="flex flex-col gap-y-4">
-                <li>Discover our exclusive range of high-quality clothing, designed to keep you stylish and comfortable. Each piece is crafted with meticulous attention to detail, ensuring a perfect fit and timeless appeal. Whether you're looking for casual wear, business attire, or something special for an occasion, we have you covered.</li>
-                <li>Our collection features a variety of styles, from classic to contemporary, made from premium fabrics that offer durability and comfort. With our clothing, you'll experience the perfect blend of fashion and function, making you look and feel your best.</li>
+                <li>Discover our exclusive range of high-quality clothing, designed to keep you stylish and comfortable.
+                    Each piece is crafted with meticulous attention to detail, ensuring a perfect fit and timeless
+                    appeal. Whether you're looking for casual wear, business attire, or something special for an
+                    occasion, we have you covered.</li>
+                <li>Our collection features a variety of styles, from classic to contemporary, made from premium fabrics
+                    that offer durability and comfort. With our clothing, you'll experience the perfect blend of fashion
+                    and function, making you look and feel your best.</li>
                 <ul class="flex flex-col gap-y-3">
                     <li class="flex gap-x-4">
-                        <svg width="29" height="24" viewBox="0 0 29 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="29" height="24" viewBox="0 0 29 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
                             <circle cx="17" cy="12" r="12" fill="#0A0A0A" />
-                            <circle cx="10" cy="12" r="8.75" fill="#D9D9D9" stroke="white" stroke-width="2.5" />
+                            <circle cx="10" cy="12" r="8.75" fill="#D9D9D9" stroke="white"
+                                stroke-width="2.5" />
                         </svg>
                         <div>Premium Quality: Made from high-quality fabrics to ensure durability and comfort.</div>
                     </li>
                     <li class="flex gap-x-4">
-                        <svg width="29" height="24" viewBox="0 0 29 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="29" height="24" viewBox="0 0 29 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
                             <circle cx="17" cy="12" r="12" fill="#0A0A0A" />
-                            <circle cx="10" cy="12" r="8.75" fill="#D9D9D9" stroke="white" stroke-width="2.5" />
+                            <circle cx="10" cy="12" r="8.75" fill="#D9D9D9" stroke="white"
+                                stroke-width="2.5" />
                         </svg>
-                        <div>Timeless Style: Our designs combine classic and contemporary elements for a versatile wardrobe.</div>
+                        <div>Timeless Style: Our designs combine classic and contemporary elements for a versatile
+                            wardrobe.</div>
                     </li>
                     <li class="flex gap-x-4">
-                        <svg width="29" height="24" viewBox="0 0 29 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="29" height="24" viewBox="0 0 29 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
                             <circle cx="17" cy="12" r="12" fill="#0A0A0A" />
-                            <circle cx="10" cy="12" r="8.75" fill="#D9D9D9" stroke="white" stroke-width="2.5" />
+                            <circle cx="10" cy="12" r="8.75" fill="#D9D9D9" stroke="white"
+                                stroke-width="2.5" />
                         </svg>
-                        <div>Perfect Fit: Carefully crafted to provide a comfortable and flattering fit for all body types.</div>
+                        <div>Perfect Fit: Carefully crafted to provide a comfortable and flattering fit for all body
+                            types.</div>
                     </li>
                 </ul>
             </ul>

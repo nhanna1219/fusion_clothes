@@ -23,6 +23,7 @@ class PaymentDetail extends Model
         'modified_at',
     ];
 
+    public $timestamps = false;
     /**
      * The attributes that should be cast to native types.
      *

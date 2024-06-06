@@ -8,8 +8,18 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
+use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Http\Controllers\Customer\CheckoutController;
+
+
 class OrderController extends Controller
 {
+    protected $checkoutController;
+
+    public function __construct(CheckoutController $checkoutController)
+    {
+        $this->checkoutController = $checkoutController;
+    }
     public function index(Request $request): View
     {
         $orders = Order::paginate(10);
@@ -26,5 +36,6 @@ class OrderController extends Controller
         $order->update($request->validated());
         return redirect()->route('customer.orders.details', $order->id);
     }
+
 }
 

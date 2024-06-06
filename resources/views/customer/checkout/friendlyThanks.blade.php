@@ -12,7 +12,7 @@
         <div class="tick">
         <img src="{{asset ('storage/checkmark-circle-outline.svg')}}" alt="" class="icons">
         <p class =" sentence1">Your order is completed!</p>
-        <p class =" sentence2">Thanks you. Your order has been received</p>
+        <p class =" sentence2">Your order has been received, we'll going to grab it to you soon 🎉</p>
         </div>
         <div class="in4order rounded">
             <div class=" items">
@@ -71,7 +71,7 @@
 
                 </div>
                 <p>300.00$</p>
-            </div> 
+            </div>
             <div class="product">
                 <div class="inforproduct">
                     <img src="{{asset ('storage/product_image.png')}}" alt="" class="icons">
@@ -136,7 +136,7 @@
             <p>00.00$</p>
         </div>
       </div>
-    </div> 
-    
+    </div>
+
 
 </x-app-layout>

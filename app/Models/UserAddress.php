@@ -20,6 +20,8 @@ class UserAddress extends Model
         'address_line1',
         'address_line2',
         'city',
+        'district',
+        'ward',
         'postal_code',
         'country',
         'phone',
@@ -34,6 +36,8 @@ class UserAddress extends Model
         'id' => 'integer',
         'user_id' => 'integer',
     ];
+
+    public $timestamps = false;
 
     public function user(): BelongsTo
     {

@@ -1,5 +1,5 @@
 @php
-$splitIndex = ceil($products->count() / 2);
+    $splitIndex = ceil($products->count() / 2);
 @endphp
 <x-app-layout>
     <x-slot name="header"></x-slot>
@@ -56,19 +56,21 @@ $splitIndex = ceil($products->count() / 2);
                 <div class="swiper-wrapper px-10 py-12">
                     <!-- Slides -->
                     @foreach ($products as $index => $product)
-                    @if ($index < $splitIndex) <div class="swiper-slide">
-                        <x-product-item usage="new-arrival" id="{{$product->id}}"
-                            image="{{ $product->images->first()->image_path }}" type="{{ $product->category->name }}"
-                            rating="4" price="{{ $product->price }}" name="{{ $product->name }}" />
+                        @if ($index < $splitIndex)
+                            <div class="swiper-slide">
+                                <x-product-item usage="new-arrival" id="{{ $product->id }}"
+                                    image="{{ $product->images->first()->image_path }}"
+                                    type="{{ $product->category->name }}" rating="4" price="{{ $product->price }}"
+                                    name="{{ $product->name }}" />
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
-                @endif
-                @endforeach
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
             </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
         </div>
-    </div>
     </div>
 
     <div id="best-seller" class="container">
@@ -85,13 +87,14 @@ $splitIndex = ceil($products->count() / 2);
                 <div class="swiper-wrapper px-10 py-12">
                     <!-- Slides -->
                     @foreach ($products as $index => $product)
-                    @if ($index >= $splitIndex)
-                    <div class="swiper-slide">
-                        <x-product-item usage="best-seller" id="{{$product->id}}"
-                            image="{{ $product->images->first()->image_path }}" type="{{ $product->category->name }}"
-                            rating="4" price="{{ $product->price }}" name="{{ $product->name }}" />
-                    </div>
-                    @endif
+                        @if ($index >= $splitIndex)
+                            <div class="swiper-slide">
+                                <x-product-item usage="best-seller" id="{{ $product->id }}"
+                                    image="{{ $product->images->first()->image_path }}"
+                                    type="{{ $product->category->name }}" rating="4" price="{{ $product->price }}"
+                                    name="{{ $product->name }}" />
+                            </div>
+                        @endif
                     @endforeach
                 </div>
                 <div class="swiper-pagination"></div>

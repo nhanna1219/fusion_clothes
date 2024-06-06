@@ -14,9 +14,9 @@ $(function () {
             document.body.scrollTop > 20 ||
             document.documentElement.scrollTop > 20
         ) {
-            mybutton.classList.remove("hidden");
+            mybutton?.classList.remove("hidden");
         } else {
-            mybutton.classList.add("hidden");
+            mybutton?.classList.add("hidden");
         }
     };
     const backToTop = () => {
@@ -24,7 +24,7 @@ $(function () {
     };
 
     // When the user clicks on the button, scroll to the top of the document
-    mybutton.addEventListener("click", backToTop);
+    mybutton?.addEventListener("click", backToTop);
 
     window.addEventListener("scroll", scrollFunction);
 
@@ -44,10 +44,6 @@ $(function () {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
-        // autoplay: {
-        //     delay: 4500,
-        //     disableOnInteraction: false,
-        // },
     });
 
     // Disable control in video
