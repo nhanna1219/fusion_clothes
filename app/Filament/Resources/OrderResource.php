@@ -140,7 +140,7 @@ class OrderResource extends Resource
                                 Forms\Components\Select::make('product_id')
                                     ->label('Name')
                                     ->native(false)
-                                    ->options(Product::all()->pluck('name', 'id')->toArray())
+                                    ->options(Product::whereHas('variants')->pluck('name', 'id')->toArray())
                                     ->reactive()
                                     ->required()
                                     ->afterStateUpdated(function (callable $get, callable $set, $state) {

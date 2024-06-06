@@ -32,13 +32,16 @@ class ProductVariantResource extends Resource
             ->schema([
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'name')
-                    ->required(),
+                    ->required()
+                    ->native(false),
                 Forms\Components\Select::make('size_id')
                     ->relationship('size', 'size_description')
-                    ->default(null),
+                    ->required()
+                    ->native(false),
                 Forms\Components\Select::make('color_id')
                     ->relationship('color', 'color_name')
-                    ->default(null),
+                    ->required()
+                    ->native(false),
                 Forms\Components\TextInput::make('quantity')
                     ->numeric()
                     ->default(0),
