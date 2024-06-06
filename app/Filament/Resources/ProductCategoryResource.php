@@ -53,6 +53,8 @@ class ProductCategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('desc')
+                    ->label('Description'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -123,14 +125,6 @@ class ProductCategoryResource extends Resource
             ]);
     }
 
-    public static function infoList(Infolist $infoList): Infolist
-    {
-        return $infoList
-                ->schema([
-                    TextEntry::make('name'),
-                    TextEntry::make('parent.name')->label('Belongs To')
-                ]);
-    }
     public static function getRelations(): array
     {
         return [

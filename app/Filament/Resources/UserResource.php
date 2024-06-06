@@ -40,7 +40,7 @@ class UserResource extends Resource
                             ->relationship('role', 'role_name')
                             ->native(false)
                             ->required()
-                            ->label(fn ($livewire) => $livewire instanceof Pages\EditUser ? 'Role' : 'role_id')
+                            ->label('Role')
                     ])->columns(2),    
                 Forms\Components\Section::make('Information')
                     ->schema([
