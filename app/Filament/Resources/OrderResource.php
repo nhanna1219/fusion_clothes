@@ -177,23 +177,33 @@ class OrderResource extends Resource
                                         if (!$productId) {
                                             return [];
                                         }
-                                        return ProductVariant::where('product_id', $productId)
-                                            ->get()
-                                            ->pluck('size.size_description', 'size_id');
+                                        $productVariant = ProductVariant::where('product_id', $productId)
+                                        ->get()
+                                        ->pluck('size.size_description', 'size_id');
+                                        if ($productVariant->contains(null)) {
+                                            return [
+                                                '' => 'No sizes found'
+                                            ];
+                                        }
+                                        return $productVariant;
                                     })
                                     ->reactive()
                                     ->required()
                                     ->afterStateUpdated(function (callable $get, callable $set, $state) {
                                         $productVariants = ProductVariant::where('product_id', $get('product_id'))->where('size_id', $state)->get();
-                                        $colors = $productVariants->pluck('color.color_name', 'color_id');
-                                        $set('colors', $colors);
-                                        $set('color_id', null);
+                                        if ($productVariants){
+                                            $colors = $productVariants->pluck('color.color_name', 'color_id');
+                                            $set('colors', $colors);
+                                            $set('color_id', null);
+                                        }
                                     }),
                                 Forms\Components\Select::make('color_id')
                                     ->label('Color')
                                     ->native(false)
                                     ->options(function ($get) {
-                                        return $get('colors') ?: [];
+                                        return $get('colors') ?: [
+                                            '' => 'No colors found'
+                                        ];
                                     })
                                     ->reactive()
                                     ->required()

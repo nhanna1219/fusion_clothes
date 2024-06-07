@@ -61,11 +61,11 @@ class CheckoutController extends Controller
             $orderDetail->save();
         }
 
-        foreach ($filteredItems as $item) {
-            Cart::instance('db')->remove($item->rowId);
-        }
-        Cart::instance('db')->erase(auth()->id());
-        Cart::instance('db')->store(auth()->id());
+        // foreach ($filteredItems as $item) {
+        //     Cart::instance('db')->remove($item->rowId);
+        // }
+        // Cart::instance('db')->erase(auth()->id());
+        // Cart::instance('db')->store(auth()->id());
 
         if ($paymentMethod === 'Momo') {
             return $this->processMomoPayment($order, $total);
@@ -77,7 +77,9 @@ class CheckoutController extends Controller
             $paymentDetail->status = 'Paid';
             $paymentDetail->save();
 
-            return response()->json(['success' => true, 'redirect_url' => route('customer.checkout.friendlyThanks')]);
+            return response()->json([
+                'success' => true,
+                'redirect_url' => route('customer.checkout.friendlyThanks'), 'order_id' => $order->id]);
         }
     }
 
@@ -117,14 +119,14 @@ class CheckoutController extends Controller
                 $address = UserAddress::findOrFail($request->address);
             }
             $jsonResult = $this->createOrder($paymentMethod);
-            $jsonResult = $jsonResult->getData(true); // Get the response data as an associative array
+            $jsonResult = $jsonResult->getData(true);
 
             if ($jsonResult['success']) {
                 Log::info(Cart::instance('db')->content());
                 if ($paymentMethod === 'Momo') {
-                    return response()->json(['success' => true, 'redirect_url' => $jsonResult['payUrl']]);
+                    return response()->json(['success' => true, 'redirect_url' => $jsonResult['redirect_url']]);
                 } else {
-                    return response()->json(['success' => true, 'redirect_url' => route('customer.checkout.friendlyThanks')]);
+                    return response()->json(['success' => true, 'redirect_url' => route('customer.checkout.friendlyThanks'), 'order_id' => $jsonResult['order_id']]);
                 }
             } else {
                 return response()->json(['error' => 'Order creation failed. Please try again.'], 500);
@@ -150,13 +152,22 @@ class CheckoutController extends Controller
     }
     public function friendlyThanks(Request $request): View
     {
-        return view('customer.checkout.friendlyThanks');
+        $orderId = $request->query('order_id');
+        $order = Order::with([
+            'orderDetail.productVariant.product',
+            'orderDetail.productVariant.color',
+            'orderDetail.productVariant.size'
+        ])->findOrFail($orderId);
+
+        $paymentDetail = PaymentDetail::where('order_id', $order->id)->first();
+
+        return view('customer.checkout.friendlyThanks', compact('order', 'paymentDetail'));
     }
 
     public function processMomoPayment($order, $totalUSD)
     {
         $exchangeRate = 25427;
-        $totalVND = $totalUSD * $exchangeRate;
+        $totalVND = round($totalUSD * $exchangeRate);
         $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
 
         $partnerCode = 'MOMOBKUN20180529';
@@ -168,7 +179,7 @@ class CheckoutController extends Controller
         $extraData = "";
 
         try {
-            $orderId = $order->id . '_' . time();
+            $orderId = time() . "";
 
             $requestId = time() . "";
             $requestType = "payWithATM";
@@ -207,7 +218,6 @@ class CheckoutController extends Controller
                 $paymentDetail->payment_method = "Momo";
                 if (isset($jsonResult['payUrl'])) {
                     // Redirect to the payment URL
-
                     $paymentDetail->status = 'Paid';
                     $paymentDetail->save();
                     return response()->json(['success' => true, 'redirect_url' => $jsonResult['payUrl']]);

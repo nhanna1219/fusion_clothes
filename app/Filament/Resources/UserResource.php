@@ -32,19 +32,20 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('email')
                             ->email()
                             ->required()
-                            ->maxLength(255)
-                            ->readOnly(),
+                            ->maxLength(255),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255)
-                            ->default(null)
-                            ->readOnly(),
+                            ->default(null),
                         Forms\Components\Select::make('role_id')
                             ->relationship('role', 'role_name')
                             ->native(false)
                             ->required()
-                            ->label('Role')
-                    ])->columns(2),    
+                            ->label('Role'),
+                        Forms\Components\TextInput::make('password')
+                            ->required()
+                            ->label('Password')
+                    ])->columns(2),
                 Forms\Components\Section::make('Information')
                     ->schema([
                         Forms\Components\TextInput::make('first_name')
@@ -83,8 +84,19 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
+                    ->before(function (Tables\Actions\DeleteAction $action, $record) {
+                        if ($record->orders()->exists()) {
+                            Notification::make()
+                                ->title('Error')
+                                ->body('Cannot delete a user that have order!')
+                                ->danger()
+                                ->send();
+
+                            $action->cancel();
+                        }
+                    })
                     ->successNotification(
                         Notification::make()
                             ->success()
@@ -95,6 +107,17 @@ class UserResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
+                        ->before(function (Tables\Actions\DeleteAction $action, $record) {
+                            if ($record->orders()->exists()) {
+                                Notification::make()
+                                    ->title('Error')
+                                    ->body('Cannot delete a user that have order!')
+                                    ->danger()
+                                    ->send();
+
+                                $action->cancel();
+                            }
+                        })
                         ->successNotification(
                             Notification::make()
                                 ->success()
@@ -104,7 +127,7 @@ class UserResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
@@ -145,7 +168,7 @@ class UserResource extends Resource
     {
         return [
             'index' => Pages\ListUsers::route('/'),
-            // 'create' => Pages\CreateUser::route('/create'),
+            'create' => Pages\CreateUser::route('/create'),
             // 'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];

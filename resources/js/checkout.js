@@ -132,9 +132,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     const data = await response.json();
-                    console.log(data);
-                    window.location.href = data.redirect_url;
-
+                    if (data.success) {
+                        const redirectUrl = new URL(data.redirect_url);
+                        redirectUrl.searchParams.append('order_id', data.order_id);
+                        window.location.href = redirectUrl.toString();
+                    } else {
+                        Swal.fire('Oops..', 'Order creation failed. Please try again.', 'error');
+                    }
                 } catch (error) {
                     console.error('Errors in checkout: ', error);
                     Swal.fire('Opps..', 'The system is currently issue an problem, please try checkout again when posible.', 'error');

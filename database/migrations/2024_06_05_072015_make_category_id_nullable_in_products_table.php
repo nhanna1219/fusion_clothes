@@ -11,11 +11,11 @@ class MakeCategoryIdNullableInProductsTable extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
-            $table->integer('category_id')->nullable()->change();
-            $table->foreign('category_id')->references('id')->on('product_categories')->onDelete('set null');
-        });
+        // Schema::table('products', function (Blueprint $table) {
+        //     $table->dropForeign(['category_id']);
+        //     $table->integer('category_id')->nullable()->change();
+        //     $table->foreign('category_id')->references('id')->on('product_categories')->onDelete('set null');
+        // });
     }
 
     /**
@@ -23,10 +23,10 @@ class MakeCategoryIdNullableInProductsTable extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
-            $table->integer('category_id')->nullable(false)->change();
-            $table->foreign('category_id')->references('id')->on('product_categories')->onDelete('cascade');
-        });
+        // Schema::table('products', function (Blueprint $table) {
+        //     $table->dropForeign(['category_id']);
+        //     $table->integer('category_id')->nullable(false)->change();
+        //     $table->foreign('category_id')->references('id')->on('product_categories')->onDelete('cascade');
+        // });
     }
 };
