@@ -13,20 +13,20 @@ class SearchProducts extends Component
     public function render()
     {
         $products = [];
-        if (strlen($this->query) > 2) {
-            $parentCategory = ProductCategory::where('name', 'like', '%' . $this->query . '%')
+        if (strlen($this->query) > 0) {
+            $parentCategory = ProductCategory::where('name', '=', $this->query)
                 ->whereNull('parent_id')
                 ->first();
 
             if ($parentCategory) {
-                $products = Product::where('name', 'like', '%' . $this->query . '%')
+                $products = Product::where('name', $this->query)
                     ->orWhereHas('category', function ($query) use ($parentCategory) {
                         $query->where('parent_id', $parentCategory->id);
                     })->get();
             } else {
                 $products = Product::where('name', 'like', '%' . $this->query . '%')
                     ->orWhereHas('category', function ($query) {
-                        $query->where('name', 'like', '%' . $this->query . '%');
+                        $query->where('name', '=', $this->query);
                     })->get();
             }
         }
@@ -47,14 +47,14 @@ class SearchProducts extends Component
 
     private function queryIsParentCategory()
     {
-        return ProductCategory::where('name', 'like', '%' . $this->query . '%')
+        return ProductCategory::where('name', '=', $this->query)
             ->whereNull('parent_id')
             ->exists();
     }
 
     private function queryIsChildCategory()
     {
-        return ProductCategory::where('name', 'like', '%' . $this->query . '%')
+        return ProductCategory::where('name', '=', $this->query)
             ->whereNotNull('parent_id')
             ->exists();
     }

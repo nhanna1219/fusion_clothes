@@ -5,6 +5,7 @@ namespace App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource;
 use App\Models\PaymentDetail;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -29,5 +30,18 @@ class CreateOrder extends CreateRecord
 
             return $order;
         });
+    }
+
+    protected function getCreatedNotification(): ?Notification
+    {
+        return Notification::make()
+        ->success()
+        ->title('Order created')
+        ->body('New order has been created successfully');
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 }

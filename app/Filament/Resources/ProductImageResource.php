@@ -7,6 +7,7 @@ use App\Filament\Resources\ProductImageResource\RelationManagers;
 use App\Models\ProductImage;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -59,11 +60,23 @@ class ProductImageResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Image deleted')
+                            ->body('The image have been deleted successfully.'),
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Images deleted')
+                                ->body('The selected images have been deleted successfully.'),
+                        ),
                 ]),
             ]);
     }

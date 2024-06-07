@@ -10,6 +10,7 @@ use App\Models\ProductSize;
 use App\Models\ProductVariant;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -91,11 +92,23 @@ class ProductVariantResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Variant deleted')
+                            ->body('The variant has been deleted successfully.'),
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Variants deleted')
+                                ->body('The selected variants have been deleted successfully.'),
+                        ),
                 ]),
             ]);
     }

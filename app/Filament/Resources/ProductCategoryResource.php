@@ -93,7 +93,13 @@ class ProductCategoryResource extends Resource
                         if ($record->products()->exists()) {
                             $record->products()->update(['category_id' => null]);
                         }
-                    }),
+                    })
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Category deleted')
+                            ->body('The category has been deleted successfully.'),
+                    ),
                 Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
@@ -119,7 +125,13 @@ class ProductCategoryResource extends Resource
                                     $record->products()->update(['category_id' => null]);
                                 }
                             }
-                        }),
+                        })
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Categories deleted')
+                                ->body('The selected categories have been deleted successfully.'),
+                        ),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);

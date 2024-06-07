@@ -5,8 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductSizeResource\Pages;
 use App\Filament\Resources\ProductSizeResource\RelationManagers;
 use App\Models\ProductSize;
+use Filament\Actions\DeleteAction;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -45,11 +47,47 @@ class ProductSizeResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->before(function ($record, Tables\Actions\DeleteAction $action) {
+                        if ($record->variants()->count() > 0) {
+                            Notification::make()
+                                ->title('Cannot Delete')
+                                ->body('This size is associated with one or more variants and cannot be deleted.')
+                                ->danger()
+                                ->send();
+
+                            $action->cancel();
+                        }
+                    })
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Size deleted')
+                            ->body('The user has been deleted successfully.'),
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->before(function ($records, Tables\Actions\DeleteBulkAction $action) {
+                            $recordsWithVariants = $records->filter(fn ($record) => $record->variants()->count() > 0);
+
+                            if ($recordsWithVariants->isNotEmpty()) {
+                                Notification::make()
+                                    ->title('Cannot Delete')
+                                    ->body('One or more sizes are associated with variants and cannot be deleted.')
+                                    ->danger()
+                                    ->send();
+
+                                $action->cancel();
+                            }
+                        })
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Sizes deleted')
+                                ->body('The selected sizes have been deleted successfully.'),
+                        ),
                 ]),
             ]);
     }

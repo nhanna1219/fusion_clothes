@@ -10,6 +10,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -81,11 +82,23 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('User deleted')
+                            ->body('The user has been deleted successfully.'),
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Users deleted')
+                                ->body('The selected users have been deleted successfully.'),
+                        ),
                 ]),
             ]);
     }

@@ -31,7 +31,7 @@ class ProductController extends Controller
             $products->where(function ($queryBuilder) use ($query) {
                 $queryBuilder->where('products.name', 'like', '%'.$query.'%')
                             ->orWhereHas('category', function ($queryBuilder) use ($query) {
-                                $queryBuilder->where('product_categories.name', 'like', '%'.$query.'%');
+                                $queryBuilder->where('product_categories.name', $query);
                             });
             });
         }

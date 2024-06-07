@@ -13,6 +13,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -298,11 +299,23 @@ class OrderResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Order deleted')
+                            ->body('The order has been deleted successfully.'),
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Orders deleted')
+                                ->body('The selected orders have been deleted successfully.'),
+                        ),
                 ]),
             ]);
     }

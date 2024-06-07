@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ProductResource\Pages;
 
 use App\Filament\Resources\ProductResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditProduct extends EditRecord
@@ -16,5 +17,18 @@ class EditProduct extends EditRecord
             Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function getSavedNotification(): ?Notification
+    {
+        return Notification::make()
+        ->success()
+        ->title('Product updated')
+        ->body('The product has been saved successfully.');
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 }

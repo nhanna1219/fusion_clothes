@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductSize extends Model
 {
@@ -29,4 +30,8 @@ class ProductSize extends Model
 
     public $timestamps = false;
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class, 'size_id');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource;
 use App\Models\PaymentDetail;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Livewire\Attributes\On;
 
@@ -38,5 +39,18 @@ class EditOrder extends EditRecord
                 'status' => $paymentStatus
             ]);
         }
+    }
+
+    protected function getSavedNotification(): ?Notification
+    {
+        return Notification::make()
+        ->success()
+        ->title('Order updated')
+        ->body('The order has been saved successfully.');
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 }

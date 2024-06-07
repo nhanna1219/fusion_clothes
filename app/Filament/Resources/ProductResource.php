@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -96,11 +97,23 @@ class ProductResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Product deleted')
+                            ->body('The product has been deleted successfully.'),
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Products deleted')
+                                ->body('The selected products have been deleted successfully.'),
+                        ),
                 ]),
             ]);
     }

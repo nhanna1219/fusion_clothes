@@ -31,4 +31,17 @@ class CreateProductVariant extends CreateRecord
 
         return parent::handleRecordCreation($data);
     }
+
+    protected function getCreatedNotification(): ?Notification
+    {
+        return Notification::make()
+        ->success()
+        ->title('Variant created')
+        ->body('New variant has been created successfully');
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
