@@ -32,7 +32,7 @@ class ProductImage extends Model
         'updated_at' => 'timestamp',
     ];
     const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'modified_at';
+    const UPDATED_AT = 'updated_at';
     
     public function product(): BelongsTo
     {

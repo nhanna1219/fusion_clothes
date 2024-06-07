@@ -93,6 +93,17 @@ class ProductVariantResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
+                    ->before(function (Tables\Actions\DeleteAction $action, $record) {
+                        if ($record->orderDetails()->count() > 0) {
+                            Notification::make()
+                                ->danger()
+                                ->title('Cannot delete')
+                                ->body('This variant is associated with an order and cannot be deleted.')
+                                ->send();
+
+                            $action->halt();
+                        }
+                    })
                     ->successNotification(
                         Notification::make()
                             ->success()
@@ -103,6 +114,21 @@ class ProductVariantResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
+                        ->before(function (Tables\Actions\DeleteBulkAction $action, $records) {
+                            $hasOrderDetails = $records->filter(function ($record) {
+                                return $record->orderDetails()->count() > 0;
+                            });
+
+                            if ($hasOrderDetails->isNotEmpty()) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Cannot delete')
+                                    ->body('One or more variants are associated with orders and cannot be deleted.')
+                                    ->send();
+
+                                $action->halt();
+                            }
+                        })
                         ->successNotification(
                             Notification::make()
                                 ->success()

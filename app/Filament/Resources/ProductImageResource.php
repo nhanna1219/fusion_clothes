@@ -43,7 +43,8 @@ class ProductImageResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('product.name')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('image_path'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

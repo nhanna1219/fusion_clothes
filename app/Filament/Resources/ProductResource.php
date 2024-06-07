@@ -83,6 +83,9 @@ class ProductResource extends Resource
                     ->options(function () {
                         return ProductCategory::with('parent')
                             ->get()
+                            ->filter(function ($category) {
+                                return $category->parent !== null;
+                            })
                             ->mapWithKeys(function ($category) {
                                 $label = $category->parent ? "{$category->name} [{$category->parent->name}]" : $category->name;
                                 return [$category->id => $label];
