@@ -174,8 +174,8 @@ class CheckoutController extends Controller
         $accessKey = 'klm05TvNBzhg7h7j';
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = "Thanh toán qua MoMo";
-        $redirectUrl = route('customer.checkout.friendlyThanks');
-        $ipnUrl = route('customer.checkout.friendlyThanks');
+        $redirectUrl = route('customer.checkout.friendlyThanks')."?order_id=".$order->id;
+        $ipnUrl = route('customer.checkout.friendlyThanks')."?order_id=".$order->id;
         $extraData = "";
 
         try {
