@@ -107,11 +107,13 @@ class UserResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->before(function (Tables\Actions\DeleteAction $action, $record) {
-                            if ($record->orders()->exists()) {
+                        ->before(function ($records, Tables\Actions\DeleteBulkAction $action) {
+                            $recordWithOrders = $records->filter(fn ($record) => $record->orders()->count() > 0);
+
+                            if ($recordWithOrders->isNotEmpty()) {
                                 Notification::make()
-                                    ->title('Error')
-                                    ->body('Cannot delete a user that have order!')
+                                    ->title('Cannot Delete')
+                                    ->body('One or more users are associated with orders and cannot be deleted.')
                                     ->danger()
                                     ->send();
 

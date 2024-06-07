@@ -219,7 +219,7 @@ class OrderResource extends Resource
                             ->label('Quantity')
                             ->required()
                             ->numeric()
-                            ->default(1)
+                            ->default(1) 
                             ->columnSpanFull(),
                     ])
                     ->label('Order Details')
