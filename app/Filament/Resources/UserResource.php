@@ -32,11 +32,13 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('email')
                             ->email()
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->readOnly(),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255)
-                            ->default(null),
+                            ->default(null)
+                            ->readOnly(),
                         Forms\Components\Select::make('role_id')
                             ->relationship('role', 'role_name')
                             ->native(false)
@@ -81,7 +83,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
                     ->successNotification(
                         Notification::make()
@@ -143,7 +145,7 @@ class UserResource extends Resource
     {
         return [
             'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
+            // 'create' => Pages\CreateUser::route('/create'),
             // 'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
