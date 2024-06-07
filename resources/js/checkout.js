@@ -134,7 +134,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     const data = await response.json();
                     if (data.success) {
                         const redirectUrl = new URL(data.redirect_url);
-                        redirectUrl.searchParams.append('order_id', data.order_id);
+                        if (!data.redirect_url.includes('test-payment')){
+                            if (redirectUrl)
+                                redirectUrl.searchParams.append('order_id', data.order_id);
+                        }
+
                         window.location.href = redirectUrl.toString();
                     } else {
                         Swal.fire('Oops..', 'Order creation failed. Please try again.', 'error');
