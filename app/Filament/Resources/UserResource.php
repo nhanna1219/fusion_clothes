@@ -45,6 +45,7 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('password')
                             ->required()
                             ->label('Password')
+                            ->hiddenOn('edit')
                     ])->columns(2),
                 Forms\Components\Section::make('Information')
                     ->schema([
