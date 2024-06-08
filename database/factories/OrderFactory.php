@@ -25,19 +25,26 @@ class OrderFactory extends Factory
 
     public function configure()
     {
-        // return $this->afterCreating(function (Order $order) {
-        //     $orderDetails = OrderDetail::factory()->count(3)->create(['order_id' => $order->id]);
+        return $this->afterCreating(function (Order $order) {
+            // // Create Order Details
+            // $orderDetails = OrderDetail::factory()->count(5)->make();
 
-        //     $total = $orderDetails->sum(function ($detail) {
-        //         return $detail->quantity * $detail->price;
-        //     });
+            // $total = 0;
+            // foreach ($orderDetails as $orderDetail) {
+            //     $orderDetail->order_id = $order->id;
+            //     $orderDetail->save();
+            //     $total += $orderDetail->price * $orderDetail->quantity;
+            // }
 
-        //     $order->update(['total' => $total]);
+            // $order->update(['total' => $total]);
 
-        //     PaymentDetail::factory()->create(['order_id' => $order->id]);
-
-        //     unset($orderDetails);
-        //     unset($total);
-        // });
+            // // Create Payment Detail
+            // PaymentDetail::factory()->create([
+            //     'order_id' => $order->id,
+            //     'amount' => $total,
+            //     'payment_method' => $this->faker->randomElement(['Credit Card', 'PayPal', 'Bank Transfer']),
+            //     'payment_status' => $this->faker->randomElement(['Paid', 'Pending', 'Failed']),
+            // ]);
+        });
     }
 }

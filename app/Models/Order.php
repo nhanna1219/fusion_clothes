@@ -43,7 +43,7 @@ class Order extends Model
     const UPDATED_AT = 'modified_at';
 
     use SoftDeletes;
-    
+
     public $timestamps = false;
     protected static function booted()
     {
@@ -68,5 +68,5 @@ class Order extends Model
         return $this->hasOne(PaymentDetail::class);
     }
 
-    
+
 }

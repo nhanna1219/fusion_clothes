@@ -52,10 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
     function toggleNewAddressForm() {
         const isNewAddress = document.getElementById('newAddress')?.checked;
         newAddressForm?.querySelectorAll('input, select').forEach(field => {
-            if (isNewAddress) {
-                field.setAttribute('required', true);
-            } else {
-                field.removeAttribute('required');
+            if (field.name !== 'address_line2'){
+                if (isNewAddress) {
+                    field.setAttribute('required', true);
+                } else {
+                    field.removeAttribute('required');
+                }
             }
         });
         if (newAddressForm) newAddressForm.style.display = isNewAddress ? 'block' : 'none';

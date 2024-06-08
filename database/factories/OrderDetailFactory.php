@@ -22,9 +22,9 @@ class OrderDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'order_id' => OrderDetail::factory(),
-            'product_id' => ProductVariant::factory(),
-            'quantity' => $this->faker->numberBetween(0, 10000),
+            'order_id' => null,
+            'product_variant_id' => ProductVariant::inRandomOrder()->first()->id,
+            'quantity' => $this->faker->numberBetween(1, 10),
             'created_at' => now(),
             'modified_at' => now(),
         ];

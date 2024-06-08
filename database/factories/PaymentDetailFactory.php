@@ -24,9 +24,31 @@ class PaymentDetailFactory extends Factory
         return [
             'order_id' => Order::factory(),
             'amount' => $this->faker->randomFloat(2, 0, 1000),
-            'status' => Str::random(['Momo', 'COD']),
+            'payment_method' => $this->faker->randomElement(['Momo', 'COD']),
+            'status' => $this->faker->randomElement(['Paid', 'Unpaid', 'Refunded']),
             'created_at' => now(),
             'modified_at' => now(),
         ];
+    }
+    public function configure()
+    {
+        return $this->afterCreating(function (PaymentDetail $paymentDetail) {
+            $order = Order::find($paymentDetail->order_id);
+
+            if ($paymentDetail->payment_method === 'Momo') {
+                if ($order->status !== 'Cancelled') {
+                    $paymentDetail->status = 'Paid';
+                } else {
+                    $paymentDetail->status = 'Refunded';
+                }
+            } else {
+                if ($order->status !== 'Shipped') {
+                    $paymentDetail->status = 'Unpaid';
+                } else {
+                    $paymentDetail->status = 'Paid';
+                }
+            }
+            $paymentDetail->save();
+        });
     }
 }

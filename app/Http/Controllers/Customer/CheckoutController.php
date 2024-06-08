@@ -54,6 +54,11 @@ class CheckoutController extends Controller
                 ->where('color_id', $item->options->colorId)
                 ->first();
 
+            if ($productVariant) {
+                $productVariant->quantity -= $item->qty;
+                $productVariant->save();
+            }
+
             $orderDetail = new OrderDetail();
             $orderDetail->order_id = $order->id;
             $orderDetail->product_variant_id = $productVariant ? $productVariant->id : null;
@@ -61,11 +66,11 @@ class CheckoutController extends Controller
             $orderDetail->save();
         }
 
-        // foreach ($filteredItems as $item) {
-        //     Cart::instance('db')->remove($item->rowId);
-        // }
-        // Cart::instance('db')->erase(auth()->id());
-        // Cart::instance('db')->store(auth()->id());
+        foreach ($filteredItems as $item) {
+            Cart::instance('db')->remove($item->rowId);
+        }
+        Cart::instance('db')->erase(auth()->id());
+        Cart::instance('db')->store(auth()->id());
 
         if ($paymentMethod === 'Momo') {
             return $this->processMomoPayment($order, $total);
