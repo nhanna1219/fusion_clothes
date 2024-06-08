@@ -101,6 +101,17 @@ class ProductResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
+                    ->before(function (Tables\Actions\DeleteAction $action, $record) {
+                        if ($record->orderDetails()->exists()) {
+                            Notification::make()
+                                ->danger()
+                                ->title('Deletion Failed')
+                                ->body('This product is part of an order and cannot be deleted.')
+                                ->send();
+
+                            $action->cancel();
+                        }
+                    })
                     ->successNotification(
                         Notification::make()
                             ->success()
@@ -111,6 +122,20 @@ class ProductResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
+                        ->before(function (Tables\Actions\DeleteBulkAction $action, $records) {
+                            $records->each(function ($record) use ($action) {
+                                if ($record->orderDetails()->exists()) {
+                                    Notification::make()
+                                        ->danger()
+                                        ->title('Deletion Failed')
+                                        ->body('One or more selected products are part of an order and cannot be deleted.')
+                                        ->send();
+
+                                    $action->cancel();
+                                    return false;
+                                }
+                            });
+                        })
                         ->successNotification(
                             Notification::make()
                                 ->success()

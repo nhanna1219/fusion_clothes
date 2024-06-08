@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Order;
 use App\Models\PaymentDetail;
+use App\Models\ProductColor;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Filament\Forms;
@@ -193,7 +194,7 @@ class OrderResource extends Resource
                                     ->afterStateUpdated(function (callable $get, callable $set, $state) {
                                         $productVariants = ProductVariant::where('product_id', $get('product_id'))->where('size_id', $state)->get();
                                         if ($productVariants){
-                                            $colors = $productVariants->pluck('color.color_name', 'color_id');
+                                            $colors = $productVariants->get()->pluck('color.color_name', 'color_id');
                                             $set('colors', $colors);
                                             $set('color_id', null);
                                         }
@@ -202,9 +203,14 @@ class OrderResource extends Resource
                                     ->label('Color')
                                     ->native(false)
                                     ->options(function ($get) {
-                                        return $get('colors') ?: [
-                                            '' => 'No colors found'
-                                        ];
+                                        $colorId = $get('color_id');
+                                        $colors = ProductColor::where('id', $colorId)->get()->pluck('color_name', 'id');
+                                        if (!$colors){
+                                            return [
+                                                '' => 'No colors found'
+                                            ];
+                                        }
+                                        return $colors;
                                     })
                                     ->reactive()
                                     ->required()
