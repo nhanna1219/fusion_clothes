@@ -17,6 +17,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class OrderResource extends Resource
@@ -315,7 +316,13 @@ class OrderResource extends Resource
                             ->success()
                             ->title('Order deleted')
                             ->body('The order has been deleted successfully.'),
-                    ),
+                    )
+                    ->after(function ($record) {
+                        DB::transaction(function () use ($record) {
+                            $record->forceDelete();
+                        });
+                    })
+                    
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -325,7 +332,14 @@ class OrderResource extends Resource
                                 ->success()
                                 ->title('Orders deleted')
                                 ->body('The selected orders have been deleted successfully.'),
-                        ),
+                        )
+                        ->after(function ($records) {
+                            DB::transaction(function () use ($records) {
+                                foreach ($records as $record) {
+                                    $record->forceDelete();
+                                }
+                            });
+                        })
                 ]),
             ]);
     }
